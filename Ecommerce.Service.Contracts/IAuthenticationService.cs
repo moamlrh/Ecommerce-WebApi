@@ -7,4 +7,5 @@ public interface IAuthenticationService
 {
     Task<IdentityResult> RegisterUser(UserForRegisterDto user);
     Task<bool> ValidateUser(UserForAuthDto user);
+    Task<string> CreateToke();
 }

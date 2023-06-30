@@ -16,9 +16,7 @@ namespace Ecommerce.Api
             );
             builder.Services.ConfigureControllers(); // Extension
             builder.Services.AddEndpointsApiExplorer();
-
-            // Enable it for Swagger usage
-            // builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen();
 
             // Action Filter test
             // builder.Services.AddScoped<ValidationUserFilter>();
@@ -34,12 +32,11 @@ namespace Ecommerce.Api
 
             var app = builder.Build();
 
-            // if (app.Environment.IsDevelopment())
-            // {
-            // -- Enable it for swagger usage --
-            // app.UseSwagger();
-            // app.UseSwaggerUI();
-            // }
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.UseCors();
             app.UseHttpsRedirection();

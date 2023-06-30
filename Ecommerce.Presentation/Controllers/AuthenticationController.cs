@@ -28,6 +28,8 @@ public class AuthenticationController : ControllerBase
         var result = await _serviceManager.AuthenticationService.ValidateUser(user);
         if (!result)
             return Unauthorized();
-        return Ok();
+
+        var Token = await _serviceManager.AuthenticationService.CreateToke();
+        return Ok(new { Token });
     }
 }
