@@ -1,8 +1,9 @@
-﻿namespace Ecommerce.Entities.Models;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class User
+namespace Ecommerce.Entities.Models;
+
+public class User : IdentityUser
 {
-    public Guid Id { get; set; }
     public int Age { get; set; }
     public string Name { get; set; }
     public bool IsAdmin { get; set; }

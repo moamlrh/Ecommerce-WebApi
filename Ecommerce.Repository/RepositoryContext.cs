@@ -1,9 +1,10 @@
 ﻿using Ecommerce.Entities.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository;
 
-public class RepositoryContext : DbContext
+public class RepositoryContext : IdentityDbContext<User>
 {
     public RepositoryContext(DbContextOptions<RepositoryContext> options)
         : base(options) { }
@@ -13,6 +14,7 @@ public class RepositoryContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(
             typeof(Configuration.UserEntityConfiguration).Assembly
         );

@@ -16,13 +16,15 @@ namespace Ecommerce.Api
             builder.Services.ConfigureControllers(); // Extension
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<ValidationUserFilter>();
+            // builder.Services.AddScoped<ValidationUserFilter>(); // Action Filter test
 
             // Service Extensions
             builder.Services.ConfigureSqlServer(builder.Configuration);
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
             builder.Services.ConfigureAutoMapper();
+            builder.Services.AddAuthentication(); // auth Identity
+            builder.Services.ConfigureIdentity();
 
             var app = builder.Build();
 
@@ -34,6 +36,7 @@ namespace Ecommerce.Api
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication(); // auth Identity 
             app.UseAuthorization();
 
             app.MapControllers();

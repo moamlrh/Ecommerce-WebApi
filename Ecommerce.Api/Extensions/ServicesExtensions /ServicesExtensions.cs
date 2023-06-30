@@ -1,8 +1,11 @@
 ﻿using Ecommerce.Contracts;
+using Ecommerce.Entities.Models;
 using Ecommerce.Repository;
 using Ecommerce.Service;
 using Ecommerce.Service.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Ecommerce.Api.Extensions;
 
@@ -41,4 +44,17 @@ public static class ServicesExtensions
 
     public static void ConfigureAutoMapper(this IServiceCollection services) =>
         services.AddAutoMapper(typeof(Ecommerce.Api.MapperProfile).Assembly);
+
+    public static void ConfigureIdentity(this IServiceCollection services)
+    {
+        services
+            .AddIdentity<User, IdentityRole>(opts =>
+            {
+                opts.Password.RequireLowercase = true;
+                opts.Password.RequireDigit = true;
+                opts.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<RepositoryContext>()
+            .AddDefaultTokenProviders();
+    }
 }

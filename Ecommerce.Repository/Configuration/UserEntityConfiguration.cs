@@ -10,28 +10,5 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
         builder.HasKey(e => e.Id);
-        builder.HasData(
-            new List<User>
-            {
-                new User
-                {
-                    Age = 21,
-                    Email = "moaml@gmail.com",
-                    Id = Guid.NewGuid(),
-                    IsAdmin = true,
-                    Name = "Moaml Rh",
-                    Password = "mo12345"
-                },
-                new User
-                {
-                    Age = 22,
-                    Email = "hood@gmail.com",
-                    Id = Guid.NewGuid(),
-                    IsAdmin = false,
-                    Name = "HoodAhmed",
-                    Password = "mo12343"
-                },
-            }
-        );
     }
 }
