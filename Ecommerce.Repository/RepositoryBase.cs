@@ -8,10 +8,7 @@ public class RepositoryBase<T> : IRepositoryBase<T>
 {
     private readonly RepositoryContext _context;
 
-    public RepositoryBase(RepositoryContext context)
-    {
-        _context = context;
-    }
+    public RepositoryBase(RepositoryContext context) => _context = context;
 
     public void Create(T entity) => _context.Set<T>().Add(entity);
 

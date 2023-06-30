@@ -10,37 +10,28 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
         builder.HasKey(e => e.Id);
-        // builder.HasData(
-        //     new List<User>
-        //     {
-        //         new User
-        //         {
-        //             Id = 1,
-        //             Age = 20,
-        //             Email = "ahmed@gmail.com",
-        //             IsAdmin = false,
-        //             Name = "ahmed ali",
-        //             Password = "123456"
-        //         },
-        //         new User
-        //         {
-        //             Id = 2,
-        //             Age = 22,
-        //             Email = "moaml@gmail.com",
-        //             IsAdmin = true,
-        //             Name = "moaml rh",
-        //             Password = "asdfjl832"
-        //         },
-        //         new User
-        //         {
-        //             Id = 3,
-        //             Age = 30,
-        //             Email = "ali@gmail.com",
-        //             IsAdmin = false,
-        //             Name = "ali yousef",
-        //             Password = "123456"
-        //         },
-        //     }
-        // );
+        builder.HasData(
+            new List<User>
+            {
+                new User
+                {
+                    Age = 21,
+                    Email = "moaml@gmail.com",
+                    Id = Guid.NewGuid(),
+                    IsAdmin = true,
+                    Name = "Moaml Rh",
+                    Password = "mo12345"
+                },
+                new User
+                {
+                    Age = 22,
+                    Email = "hood@gmail.com",
+                    Id = Guid.NewGuid(),
+                    IsAdmin = false,
+                    Name = "HoodAhmed",
+                    Password = "mo12343"
+                },
+            }
+        );
     }
 }

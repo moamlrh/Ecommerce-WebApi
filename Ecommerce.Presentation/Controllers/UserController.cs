@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ecommerce.Presentation.Controllers;
 
 [Route("/api/users")]
+[ApiController]
 public class UserController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
@@ -14,10 +15,26 @@ public class UserController : ControllerBase
         _serviceManager = serviecManager;
     }
 
-    [HttpGet]
-    public IActionResult GetUsers()
+    [HttpGet(Name = "GetUsers")]
+    public async Task<IActionResult> GetUsers()
     {
-        _serviceManager.UsersService.GetUsers();
-        return Ok();
+        var users = await _serviceManager.UsersService.GetUsersAsync();
+        return Ok(users);
+    }
+
+    [HttpGet("{id:guid}", Name = "GetUserById")]
+    public async Task<IActionResult> GetUserById(Guid Id)
+    {
+        var user = await _serviceManager.UsersService.GetUserByIdAsync(Id);
+        return Ok(user);
+    }
+
+    [HttpPost("create")]
+    [ServiceFilter(typeof(ValidationUserFilter))]
+    public async Task<IActionResult> CreateUser([FromBody] UserForRegisterDto user)
+    {
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+        return Ok(user);
     }
 }

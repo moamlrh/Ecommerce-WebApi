@@ -4,5 +4,6 @@ namespace Ecommerce.Service.Contracts;
 
 public interface IUserService
 {
-    IEnumerable<UserDto> GetUsers();
+    Task<IEnumerable<UserDto>> GetUsersAsync();
+    Task<UserDto> GetUserByIdAsync(Guid Id);
 }

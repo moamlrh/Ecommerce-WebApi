@@ -4,5 +4,6 @@ namespace Ecommerce.Contracts;
 
 public interface IUserRepository
 {
-    IEnumerable<User> GetUsers();
+    Task<IEnumerable<User>> GetUsersAsync();
+    Task<User> GetUserByIdAsync(Guid Id);
 }

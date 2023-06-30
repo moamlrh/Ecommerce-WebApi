@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,7 +8,7 @@
 namespace Ecommerce.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class addUsers : Migration
+    public partial class adddumyusers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +18,8 @@ namespace Ecommerce.Api.Migrations
                 columns: new[] { "Id", "Age", "Email", "IsAdmin", "Name", "Password" },
                 values: new object[,]
                 {
-                    { 1, 20, "ahmed@gmail.com", false, "ahmed ali", "123456" },
-                    { 2, 22, "moaml@gmail.com", true, "moaml rh", "asdfjl832" },
-                    { 3, 30, "ali@gmail.com", false, "ali yousef", "123456" }
+                    { new Guid("177992d2-2e3d-4019-ada2-08fa700b0f8b"), 22, "hood@gmail.com", false, "HoodAhmed", "mo12343" },
+                    { new Guid("473ae3f5-d410-43ea-826f-4709f658320e"), 21, "moaml@gmail.com", true, "Moaml Rh", "mo12345" }
                 });
         }
 
@@ -29,17 +29,12 @@ namespace Ecommerce.Api.Migrations
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: 1);
+                keyValue: new Guid("177992d2-2e3d-4019-ada2-08fa700b0f8b"));
 
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "Users",
-                keyColumn: "Id",
-                keyValue: 3);
+                keyValue: new Guid("473ae3f5-d410-43ea-826f-4709f658320e"));
         }
     }
 }

@@ -11,7 +11,10 @@ public static class ServicesExtensions
     public static void ConfigureControllers(this IServiceCollection services)
     {
         services
-            .AddControllers()
+            .AddControllers(config =>
+            {
+                config.RespectBrowserAcceptHeader = true;
+            })
             .AddApplicationPart(typeof(Presentation.Controllers.UserController).Assembly);
     }
 
@@ -35,4 +38,7 @@ public static class ServicesExtensions
 
     public static void ConfigureServiceManager(this IServiceCollection service) =>
         service.AddScoped<IServiceManager, ServiceManager>();
+
+    public static void ConfigureAutoMapper(this IServiceCollection services) =>
+        services.AddAutoMapper(typeof(Ecommerce.Api.MapperProfile).Assembly);
 }

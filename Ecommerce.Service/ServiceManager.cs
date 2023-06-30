@@ -1,17 +1,18 @@
-﻿using Ecommerce.Contracts;
+﻿using AutoMapper;
+using Ecommerce.Contracts;
 using Ecommerce.Service.Contracts;
 
 namespace Ecommerce.Service;
 
-public class ServiceManager : IServiceManager 
+public class ServiceManager : IServiceManager
 {
     private readonly Lazy<IUserService> userService;
     private readonly Lazy<IProductService> productService;
 
-    public ServiceManager(IRepositoryManager repositoryManager)
+    public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper)
     {
-        userService = new(() => new UserService(repositoryManager));
-        productService = new(() => new ProductService(repositoryManager));
+        userService = new(() => new UserService(repositoryManager, mapper));
+        // productService = new(() => new ProductService(repositoryManager, mapper));
     }
 
     public IUserService UsersService => userService.Value;
