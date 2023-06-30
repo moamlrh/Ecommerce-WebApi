@@ -50,8 +50,9 @@ public static class ServicesExtensions
         services
             .AddIdentity<User, IdentityRole>(opts =>
             {
-                opts.Password.RequireLowercase = true;
-                opts.Password.RequireDigit = true;
+                // opts.Password.RequireLowercase = true;
+                // opts.Password.RequireDigit = true;
+                // opts.User.AllowedUserNameCharacters = String.Empty;
                 opts.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<RepositoryContext>()

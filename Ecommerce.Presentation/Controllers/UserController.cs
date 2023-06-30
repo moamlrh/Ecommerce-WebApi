@@ -28,13 +28,4 @@ public class UserController : ControllerBase
         var user = await _serviceManager.UsersService.GetUserByIdAsync(Id);
         return Ok(user);
     }
-
-    [HttpPost("create")]
-    [ServiceFilter(typeof(ValidationUserFilter))]
-    public async Task<IActionResult> CreateUser([FromBody] UserForRegisterDto user)
-    {
-        if (!ModelState.IsValid)
-            return UnprocessableEntity(ModelState);
-        return Ok(user);
-    }
 }

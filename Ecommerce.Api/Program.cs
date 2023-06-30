@@ -15,7 +15,9 @@ namespace Ecommerce.Api
             );
             builder.Services.ConfigureControllers(); // Extension
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            // Enable it for swagger usage
+            // builder.Services.AddSwaggerGen();
+
             // builder.Services.AddScoped<ValidationUserFilter>(); // Action Filter test
 
             // Service Extensions
@@ -30,13 +32,14 @@ namespace Ecommerce.Api
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                // Enable it for swagger usage
+                // app.UseSwagger();
+                // app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication(); // auth Identity 
+            app.UseAuthentication(); // auth Identity
             app.UseAuthorization();
 
             app.MapControllers();

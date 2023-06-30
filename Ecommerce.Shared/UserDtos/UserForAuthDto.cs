@@ -2,10 +2,13 @@
 
 namespace Ecommerce.Shared;
 
-public record class UserForRegisterDto
+public record class UserForAuthDto
 {
+    [Required]
+    [EmailAddress]
     public string Email { get; set; }
 
+    [Required]
+    [MinLength(6)]
     public string Password { get; set; }
-    public string Username { get; set; }
-};
+}

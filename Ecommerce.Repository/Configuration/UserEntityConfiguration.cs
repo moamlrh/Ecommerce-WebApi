@@ -10,5 +10,8 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable("Users");
         builder.HasKey(e => e.Id);
+        builder.Ignore(e => e.TwoFactorEnabled);
+        builder.Ignore(e => e.PhoneNumber);
+        builder.Ignore(e => e.PhoneNumberConfirmed);
     }
 }
