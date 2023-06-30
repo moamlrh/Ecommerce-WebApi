@@ -26,10 +26,10 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<IdentityResult> RegisterUser(UserForRegisterDto user)
     {
-        var mappedUser = _mapper.Map<User>(user);
-        var result = await _userManager.CreateAsync(mappedUser, user.Password);
+        var _user = _mapper.Map<User>(user);
+        var result = await _userManager.CreateAsync(_user, user.Password);
         if (result.Succeeded)
-            await _userManager.AddToRoleAsync(mappedUser, "ADMIN");
+            await _userManager.AddToRoleAsync(_user, "ADMIN");
         return result;
     }
 

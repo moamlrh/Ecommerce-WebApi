@@ -11,14 +11,17 @@ namespace Ecommerce.Api
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.Configure<ApiBehaviorOptions>(
-                opts => opts.SuppressModelStateInvalidFilter = true // To enable our custom responses from the actions for validation
+                // To enable our custom responses from the actions for validation
+                opts => opts.SuppressModelStateInvalidFilter = true
             );
             builder.Services.ConfigureControllers(); // Extension
             builder.Services.AddEndpointsApiExplorer();
-            // Enable it for swagger usage
+
+            // Enable it for Swagger usage
             // builder.Services.AddSwaggerGen();
 
-            // builder.Services.AddScoped<ValidationUserFilter>(); // Action Filter test
+            // Action Filter test
+            // builder.Services.AddScoped<ValidationUserFilter>();
 
             // Service Extensions
             builder.Services.ConfigureSqlServer(builder.Configuration);
@@ -37,9 +40,11 @@ namespace Ecommerce.Api
                 // app.UseSwaggerUI();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
 
-            app.UseAuthentication(); // auth Identity
+            // auth Identity
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

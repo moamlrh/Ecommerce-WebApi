@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Contracts;
 using Ecommerce.Entities.Models;
+using Ecommerce.Presentation.Controllers;
 using Ecommerce.Repository;
 using Ecommerce.Service;
 using Ecommerce.Service.Contracts;
@@ -14,11 +15,8 @@ public static class ServicesExtensions
     public static void ConfigureControllers(this IServiceCollection services)
     {
         services
-            .AddControllers(config =>
-            {
-                config.RespectBrowserAcceptHeader = true;
-            })
-            .AddApplicationPart(typeof(Presentation.Controllers.UserController).Assembly);
+            .AddControllers(config => config.RespectBrowserAcceptHeader = true)
+            .AddApplicationPart(typeof(UserController).Assembly);
     }
 
     public static void ConfigureSqlServer(
@@ -28,11 +26,8 @@ public static class ServicesExtensions
     {
         services.AddDbContext<RepositoryContext>(options =>
         {
-            var connectionString = configuration.GetConnectionString("SqlServerString");
-            options.UseSqlServer(
-                connectionString,
-                options => options.MigrationsAssembly("Ecommerce.Api")
-            );
+            var constr = configuration.GetConnectionString("SqlServerString");
+            options.UseSqlServer(constr, options => options.MigrationsAssembly("Ecommerce.Api"));
         });
     }
 
@@ -43,19 +38,21 @@ public static class ServicesExtensions
         service.AddScoped<IServiceManager, ServiceManager>();
 
     public static void ConfigureAutoMapper(this IServiceCollection services) =>
-        services.AddAutoMapper(typeof(Ecommerce.Api.MapperProfile).Assembly);
+        services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
     public static void ConfigureIdentity(this IServiceCollection services)
     {
         services
-            .AddIdentity<User, IdentityRole>(opts =>
-            {
-                // opts.Password.RequireLowercase = true;
-                // opts.Password.RequireDigit = true;
-                // opts.User.AllowedUserNameCharacters = String.Empty;
-                opts.User.RequireUniqueEmail = true;
-            })
+            .AddIdentity<User, IdentityRole>()
             .AddEntityFrameworkStores<RepositoryContext>()
             .AddDefaultTokenProviders();
+
+        services.Configure<IdentityOptions>(config =>
+        {
+            config.Password.RequireLowercase = true;
+            config.Password.RequireDigit = true;
+            config.User.AllowedUserNameCharacters = String.Empty;
+            config.User.RequireUniqueEmail = true;
+        });
     }
 }
