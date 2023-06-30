@@ -30,15 +30,16 @@ namespace Ecommerce.Api
             builder.Services.ConfigureAutoMapper();
             builder.Services.AddAuthentication(); // auth Identity
             builder.Services.ConfigureIdentity();
+            builder.Services.ConfigureJWT(builder.Configuration);
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-                // Enable it for swagger usage
-                // app.UseSwagger();
-                // app.UseSwaggerUI();
-            }
+            // if (app.Environment.IsDevelopment())
+            // {
+            // -- Enable it for swagger usage --
+            // app.UseSwagger();
+            // app.UseSwaggerUI();
+            // }
 
             app.UseCors();
             app.UseHttpsRedirection();

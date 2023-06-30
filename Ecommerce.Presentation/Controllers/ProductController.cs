@@ -1,3 +1,20 @@
-﻿namespace Ecommerce.Presentation.Controllers;
+﻿using Ecommerce.Service.Contracts;
+using Microsoft.AspNetCore.Mvc;
 
-public class ProductController { }
+namespace Ecommerce.Presentation.Controllers;
+
+[Route("api/products")]
+[ApiController]
+public class ProductController : ControllerBase
+{
+    private readonly IServiceManager _serviceManager;
+
+    public ProductController(IServiceManager serviceManager) => _serviceManager = serviceManager;
+
+    [HttpGet(Name = "GetAllProducts")]
+    public async Task<IActionResult> GetAllProducts()
+    {
+        var products = await _serviceManager.ProductService.GetAllAsync();
+        return Ok(products);
+    }
+}

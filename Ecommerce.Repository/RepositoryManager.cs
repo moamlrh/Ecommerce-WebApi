@@ -18,5 +18,5 @@ public class RepositoryManager : IRepositoryManager
     public IUserRepository UsersRepository => userRepository.Value;
     public IProductRepository ProductsRepository => productRepository.Value;
 
-    public void Save() => _repositoryContext.SaveChanges();
+    public void SaveAsync() => _repositoryContext.SaveChangesAsync();
 }

@@ -11,10 +11,6 @@ public class UserRepository : RepositoryBase<User>, IUserRepository
 
     public async Task<IEnumerable<User>> GetUsersAsync() => await FindAll().ToArrayAsync();
 
-    public async Task<User> GetUserByIdAsync(Guid Id)
-    {
-        System.Console.WriteLine(Id);
-        System.Console.WriteLine("________________________________________________");
-        return await FindByCondition(user => user.Id.Equals(Id)).FirstOrDefaultAsync();
-    }
+    public async Task<User> GetUserByIdAsync(Guid Id) =>
+        await FindByCondition(user => user.Id.Equals(Id)).FirstOrDefaultAsync();
 }
