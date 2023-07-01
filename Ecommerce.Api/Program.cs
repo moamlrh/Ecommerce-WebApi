@@ -10,12 +10,9 @@ namespace Ecommerce.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.Configure<ApiBehaviorOptions>(
-                // To enable our custom responses from the actions for validation
-                opts => opts.SuppressModelStateInvalidFilter = true
-            );
             builder.Services.ConfigureControllers(); // Extension
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.ConfigureApiBehaviorOptions(); // Extension
             builder.Services.AddSwaggerGen();
 
             // Action Filter test
@@ -26,7 +23,7 @@ namespace Ecommerce.Api
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
             builder.Services.ConfigureAutoMapper();
-            builder.Services.AddAuthentication(); // auth Identity
+            builder.Services.AddAuthentication(); // Auth Identity
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureJWT(builder.Configuration);
 

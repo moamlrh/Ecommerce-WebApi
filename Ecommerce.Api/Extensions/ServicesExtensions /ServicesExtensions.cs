@@ -22,6 +22,15 @@ public static class ServicesExtensions
             .AddApplicationPart(typeof(UserController).Assembly);
     }
 
+    public static void ConfigureApiBehaviorOptions(this IServiceCollection services)
+    {
+        services.Configure<ApiBehaviorOptions>(opts =>
+        {
+            // To enable our custom responses from the actions for validation
+            opts.SuppressModelStateInvalidFilter = true;
+        });
+    }
+
     public static void ConfigureSqlServer(
         this IServiceCollection services,
         IConfiguration configuration
