@@ -39,8 +39,12 @@ public static class ServicesExtensions
     {
         services.AddDbContext<RepositoryContext>(options =>
         {
-            var constr = configuration.GetConnectionString("SqlServerString");
-            options.UseSqlServer(constr, options => options.MigrationsAssembly("Ecommerce.Api"));
+            var constrFromJson = configuration.GetConnectionString("SqlServerString"); // Enable This for appsettings.json
+            var constrFromEnv = Environment.GetEnvironmentVariable("SqlServerConnectionString");
+            options.UseSqlServer(
+                constrFromEnv,
+                options => options.MigrationsAssembly("Ecommerce.Api")
+            );
         });
     }
 
