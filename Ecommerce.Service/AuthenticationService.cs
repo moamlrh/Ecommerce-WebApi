@@ -17,8 +17,8 @@ public class AuthenticationService : IAuthenticationService
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    private User? _user;
     private readonly IConfiguration _configuration;
+    private User? _user;
 
     public AuthenticationService(
         IRepositoryManager repositoryManager,
@@ -35,7 +35,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<IdentityResult> RegisterUser(UserForRegisterDto user)
     {
-        var _user = _mapper.Map<User>(user);
+        _user = _mapper.Map<User>(user);
         var result = await _userManager.CreateAsync(_user, user.Password);
         if (result.Succeeded)
             await _userManager.AddToRoleAsync(_user, "ADMIN");
@@ -44,11 +44,12 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<bool> ValidateUser(UserForAuthDto user)
     {
-        var userFromDb = await _userManager.FindByEmailAsync(user.Email);
+        _user = await _userManager.FindByEmailAsync(user.Email);
         var checkLogin =
-            userFromDb != null && await _userManager.CheckPasswordAsync(userFromDb, user.Password);
+            _user != null && await _userManager.CheckPasswordAsync(_user, user.Password);
         return checkLogin;
     }
+
     public async Task<string> CreateToke()
     {
         // create signing credentials
@@ -64,13 +65,11 @@ public class AuthenticationService : IAuthenticationService
             claims.Add(new Claim(ClaimTypes.Name, role));
         }
 
-        // Generate Token 
+        // Generate Token
         return GetJwtSecurityToken(signingCred, claims);
     }
-    private string GetJwtSecurityToken(
-        SigningCredentials signingCredentials,
-        List<Claim> claims
-    )
+
+    private string GetJwtSecurityToken(SigningCredentials signingCredentials, List<Claim> claims)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
         var tokenOptions = new JwtSecurityToken(
