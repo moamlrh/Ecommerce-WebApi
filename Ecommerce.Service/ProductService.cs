@@ -22,4 +22,11 @@ public class ProductService : IProductService
         var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
         return productsDto;
     }
+
+    public async Task<ProductDto> GetByIdAsync(Guid Id)
+    {
+        var _product = await _repositoryManager.ProductsRepository.GetByIdAsync(Id);
+        var product = _mapper.Map<ProductDto>(_product);
+        return product;
+    }
 }

@@ -10,4 +10,7 @@ public class ProductRepository : RepositoryBase<Product>, IProductRepository
         : base(context) { }
 
     public async Task<IEnumerable<Product>> GetAllAsync() => await FindAll().ToArrayAsync();
+
+    public async Task<Product> GetByIdAsync(Guid Id) =>
+        await FindByCondition(p => p.Id.Equals(Id)).FirstOrDefaultAsync();
 }
