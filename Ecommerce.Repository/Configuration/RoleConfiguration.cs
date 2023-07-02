@@ -13,8 +13,8 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.HasData(
             new List<Role>
             {
-                new Role { Name = "admin", NormalizedName = "ADMIN" },
-                new Role { Name = "user", NormalizedName = "USER" },
+                new Role { Name = "Admin", NormalizedName = "ADMIN" },
+                new Role { Name = "User", NormalizedName = "USER" },
             }
         );
     }
