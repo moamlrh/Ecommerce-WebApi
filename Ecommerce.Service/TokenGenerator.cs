@@ -52,9 +52,9 @@ public class TokenGenerator : ITokenGenerator
 
         await _userManager.UpdateAsync(_user);
 
-        var options = GetJwtSecurityToken(signingCred, claims);
+        var jwtToken = GetJwtSecurityToken(signingCred, claims);
 
-        var accessToken = new JwtSecurityTokenHandler().WriteToken(options);
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
         var token = new TokenDto() { AccessToken = accessToken, RefreshToken = refreshToken };
         return token;
     }
@@ -104,7 +104,7 @@ public class TokenGenerator : ITokenGenerator
 
     private JwtSecurityToken GetJwtSecurityToken(SigningCredentials signingCredentials, List<Claim> claims)
     {
-        var tokenOptions = new JwtSecurityToken(
+        var jwtToken = new JwtSecurityToken(
             issuer: _jwtOptions.validIssuer,
             audience: _jwtOptions.validAudience,
             claims: claims,
@@ -112,6 +112,6 @@ public class TokenGenerator : ITokenGenerator
             signingCredentials: signingCredentials
         );
 
-        return tokenOptions;
+        return jwtToken;
     }
 }

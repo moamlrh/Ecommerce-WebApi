@@ -6,7 +6,7 @@
  - Asp.net core webapi 8
  - Entity framewrok 
  - SqlServer 
- - Identity/Jwt (json web tokens) for Auth
+ - Identity/Jwt (json web tokens) and Refresh token for Auth
  - AutoMapper
  - Clean Architecture
  - Repository Pattern
