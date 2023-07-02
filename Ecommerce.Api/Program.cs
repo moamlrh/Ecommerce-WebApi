@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using Ecommerce.Api.Extensions;
 using Ecommerce.Presentation;
+using Ecommerce.Presentation.Actions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api
@@ -16,7 +18,7 @@ namespace Ecommerce.Api
             builder.Services.AddSwaggerGen();
 
             // Action Filter test
-            // builder.Services.AddScoped<ValidationUserFilter>();
+            builder.Services.AddScoped<ValidationActionAttribute>();
 
             // Service Extensions
             builder.Services.ConfigureSqlServer(builder.Configuration);
