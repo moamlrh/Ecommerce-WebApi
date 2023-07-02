@@ -37,15 +37,15 @@ public class AuthenticationService : IAuthenticationService
         _tokenGenerator = tokenGenerator;
     }
 
-    public async Task<TokenDto> RegisterUser(UserForRegisterDto user)
+    public async Task<UserDto> RegisterUser(UserForRegisterDto user)
     {
         _user = _mapper.Map<User>(user);
         var result = await _userManager.CreateAsync(_user, user.Password);
         if (!result.Succeeded)
             throw new UnauthorizedAccessException("Error while creating user");
 
-        await _userManager.AddToRoleAsync(_user, "USER");
-        return await _tokenGenerator.CreateToken(_user);
+        var _userDto = _mapper.Map<UserDto>(_user);
+        return _userDto;
     }
 
     public async Task<TokenDto> ValidateUser(UserForAuthDto user)

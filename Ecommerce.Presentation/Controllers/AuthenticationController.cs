@@ -1,7 +1,4 @@
-﻿using System.Runtime.Intrinsics.X86;
-using System.ComponentModel.DataAnnotations;
-using Ecommerce.Entities;
-using Ecommerce.Presentation.Actions;
+﻿using Ecommerce.Presentation.Actions;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +18,8 @@ public class AuthenticationController : ControllerBase
     [ServiceFilter(typeof(ValidationActionAttribute))]
     public async Task<IActionResult> Register([FromBody] UserForRegisterDto user)
     {
-        var tokens = await _serviceManager.AuthenticationService.RegisterUser(user);
-        return Ok(new { user, tokens });
+        var _user = await _serviceManager.AuthenticationService.RegisterUser(user);
+        return Ok(new { _user });
     }
 
     [HttpPost("login")]
