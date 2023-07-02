@@ -22,7 +22,7 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> Register([FromBody] UserForRegisterDto user)
     {
         var result = await _serviceManager.AuthenticationService.RegisterUser(user);
-        return Ok(user);
+        return Ok(new { user, tokens = result });
     }
 
     [HttpPost("login")]
@@ -30,7 +30,6 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> Login([FromBody] UserForAuthDto user)
     {
         var result = await _serviceManager.AuthenticationService.ValidateUser(user);
-        // var Token = await _serviceManager.AuthenticationService.CreateToke();
         return Ok(new { result });
     }
 }
