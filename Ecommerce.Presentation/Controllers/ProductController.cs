@@ -27,8 +27,6 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> GetProductById(Guid Id)
     {
         var product = await _serviceManager.ProductService.GetByIdAsync(Id);
-        if (product == null)
-            throw new ProductNotFoundException(Id);
         return Ok(product);
     }
 

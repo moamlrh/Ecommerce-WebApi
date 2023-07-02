@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using Ecommerce.Contracts;
+using Ecommerce.Entities;
 using Ecommerce.Entities.Models;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
@@ -39,6 +40,8 @@ public class ProductService : IProductService
     {
         var _product = await _repositoryManager.ProductsRepository.GetByIdAsync(Id);
         var product = _mapper.Map<ProductDto>(_product);
+        if (product is null)
+            throw new ProductNotFoundException(Id);
         return product;
     }
 }
