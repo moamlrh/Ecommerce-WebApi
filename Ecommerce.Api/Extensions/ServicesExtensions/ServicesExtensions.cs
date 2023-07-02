@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System.Security.Claims;
+using System.Text;
+using Ecommerce.Api.JwtConfig;
 using Ecommerce.Contracts;
+using Ecommerce.Entities;
 using Ecommerce.Entities.Models;
 using Ecommerce.Presentation.Controllers;
 using Ecommerce.Repository;
@@ -21,6 +24,11 @@ public static class ServicesExtensions
         services
             .AddControllers(config => config.RespectBrowserAcceptHeader = true)
             .AddApplicationPart(typeof(UserController).Assembly);
+    }
+
+    public static void ConfigureCors(this IServiceCollection services)
+    {
+        services.AddCors(opts => opts.AddDefaultPolicy(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
     }
 
     public static void ConfigureApiBehaviorOptions(this IServiceCollection services)
@@ -60,7 +68,7 @@ public static class ServicesExtensions
     public static void ConfigureIdentity(this IServiceCollection services)
     {
         services
-            .AddIdentity<User, IdentityRole>()
+            .AddIdentity<User, Role>()
             .AddEntityFrameworkStores<RepositoryContext>()
             .AddDefaultTokenProviders();
 
@@ -75,7 +83,9 @@ public static class ServicesExtensions
 
     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
+        services.Configure<JWTOptions>(configuration.GetSection("JWTOptions"));
+
+        var jwtSettings = configuration.GetSection("JWTOptions");
         var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
 
         services
@@ -95,6 +105,20 @@ public static class ServicesExtensions
                     ValidIssuer = jwtSettings["ValidIssuer"],
                     ValidAudience = jwtSettings["ValidAudience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                };
+                // To check if user in the database or not (has been removed)
+                // if not revoke the token
+                opts.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userManager = context.HttpContext.RequestServices.GetService<UserManager<User>>();
+                        var userEmail = context.Principal.FindFirst("Email")?.Value;
+                        var user = userManager.FindByEmailAsync(userEmail);
+                        if (user == null)
+                            context.Fail("UnAuthorized");
+                        return Task.CompletedTask;
+                    }
                 };
             });
     }

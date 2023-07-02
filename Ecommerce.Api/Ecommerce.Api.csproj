@@ -20,6 +20,7 @@
     <ProjectReference Include="..\Ecommerce.Presentation\Ecommerce.Presentation.csproj" />
     <ProjectReference Include="..\Ecommerce.Repository\Ecommerce.Repository.csproj" />
     <ProjectReference Include="..\Ecommerce.Service\Ecommerce.Service.csproj" />
+    <ProjectReference Include="..\Ecommerce.Shared\Ecommerce.Shared.csproj" />
   </ItemGroup>
 
 </Project>

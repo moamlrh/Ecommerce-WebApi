@@ -8,7 +8,10 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<User, UserDto>(); //.ForMember(e => e.Id, opts => opts.MapFrom(e => e.Id));
+        CreateMap<User, UserDto>().ReverseMap(); //.ForMember(e => e.Id, opts => opts.MapFrom(e => e.Id));
         CreateMap<User, UserForRegisterDto>().ReverseMap();
+
+        CreateMap<Product, ProductDto>().ReverseMap();
+        CreateMap<Product, ProductToAddDto>().ReverseMap();
     }
 }

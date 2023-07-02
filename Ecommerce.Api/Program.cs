@@ -20,6 +20,7 @@ namespace Ecommerce.Api
 
             // Service Extensions
             builder.Services.ConfigureSqlServer(builder.Configuration);
+            builder.Services.ConfigureCors();
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
             builder.Services.ConfigureAutoMapper();
@@ -37,6 +38,9 @@ namespace Ecommerce.Api
 
             app.UseCors();
             app.UseHttpsRedirection();
+
+            // Extenstions
+            app.ConfigureExceptionHandler();
 
             // auth Identity
             app.UseAuthentication();

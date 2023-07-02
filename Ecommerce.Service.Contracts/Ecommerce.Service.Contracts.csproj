@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <ProjectReference Include="..\Ecommerce.Shared\Ecommerce.Shared.csproj" />
     <ProjectReference Include="..\Ecommerce.Entities\Ecommerce.Entities.csproj" />

@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Contracts;
+using Ecommerce.Entities;
 using Ecommerce.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +13,7 @@ public class UserRepository : RepositoryBase<User>, IUserRepository
     public async Task<IEnumerable<User>> GetUsersAsync() => await FindAll().ToArrayAsync();
 
     public async Task<User> GetUserByIdAsync(Guid Id) =>
-        await FindByCondition(user => user.Id.Equals(Id)).FirstOrDefaultAsync();
+        await FindByCondition(user => user.Id.ToString() == Id.ToString()).FirstOrDefaultAsync();
+    
+    public async void DeleteUserAsync(User user) => Delete(user);
 }

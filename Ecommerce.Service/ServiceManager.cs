@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Ecommerce.Api.JwtConfig;
 using Ecommerce.Contracts;
 using Ecommerce.Entities.Models;
 using Ecommerce.Service.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Ecommerce.Service;
 
@@ -17,13 +19,13 @@ public class ServiceManager : IServiceManager
         IRepositoryManager repoManager,
         IMapper mapper,
         UserManager<User> userManager,
-        IConfiguration configuration
+        IOptions<JWTOptions> options
     )
     {
         userService = new(() => new UserService(repoManager, mapper));
         productService = new(() => new ProductService(repoManager, mapper));
         authService = new(
-            () => new AuthenticationService(repoManager, mapper, userManager, configuration)
+            () => new AuthenticationService(repoManager, mapper, userManager, options)
         );
     }
 

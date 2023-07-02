@@ -1,7 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Ecommerce.Contracts;
+using Ecommerce.Entities.Models;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
+using Microsoft.AspNetCore.Identity;
 
 namespace Ecommerce.Service;
 
@@ -14,6 +17,15 @@ public class ProductService : IProductService
     {
         _repositoryManager = repositoryManager;
         _mapper = mapper;
+    }
+
+    public async Task<ProductDto> AddAsync(ProductToAddDto productToAdd, string userId)
+    {
+        var product = _mapper.Map<Product>(productToAdd);
+        product.UserId = userId;
+        _repositoryManager.ProductsRepository.Add(product);
+        await _repositoryManager.SaveAsync();
+        return _mapper.Map<ProductDto>(product);
     }
 
     public async Task<IEnumerable<ProductDto>> GetAllAsync()

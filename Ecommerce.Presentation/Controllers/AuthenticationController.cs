@@ -1,4 +1,5 @@
-﻿using Ecommerce.Service.Contracts;
+﻿using Ecommerce.Entities;
+using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ public class AuthenticationController : ControllerBase
         var result = await _serviceManager.AuthenticationService.RegisterUser(user);
         if (!result.Succeeded)
             return BadRequest(result.Errors);
-        return Ok(result.Succeeded);
+        return Ok(user);
     }
 
     [HttpPost("login")]
@@ -27,7 +28,7 @@ public class AuthenticationController : ControllerBase
     {
         var result = await _serviceManager.AuthenticationService.ValidateUser(user);
         if (!result)
-            return Unauthorized();
+            throw new UserLoginFaildException();
 
         var Token = await _serviceManager.AuthenticationService.CreateToke();
         return Ok(new { Token });

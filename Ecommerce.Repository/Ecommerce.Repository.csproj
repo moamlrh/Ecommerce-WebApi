@@ -17,6 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models/" />
+    <Folder Include="ModelsRepository/" />
   </ItemGroup>
 </Project>

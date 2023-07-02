@@ -2,12 +2,15 @@
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
+using Ecommerce.Api.JwtConfig;
 using Ecommerce.Contracts;
+using Ecommerce.Entities;
 using Ecommerce.Entities.Models;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Ecommerce.Service;
@@ -17,20 +20,20 @@ public class AuthenticationService : IAuthenticationService
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    private readonly IConfiguration _configuration;
+    private readonly IOptions<JWTOptions> _options;
     private User? _user;
 
     public AuthenticationService(
         IRepositoryManager repositoryManager,
         IMapper mapper,
         UserManager<User> userManager,
-        IConfiguration configuration
+        IOptions<JWTOptions> options
     )
     {
         _repositoryManager = repositoryManager;
         _mapper = mapper;
         _userManager = userManager;
-        _configuration = configuration;
+        _options = options;
     }
 
     public async Task<IdentityResult> RegisterUser(UserForRegisterDto user)
@@ -38,16 +41,19 @@ public class AuthenticationService : IAuthenticationService
         _user = _mapper.Map<User>(user);
         var result = await _userManager.CreateAsync(_user, user.Password);
         if (result.Succeeded)
-            await _userManager.AddToRoleAsync(_user, "ADMIN");
+        {
+            if (_user.Email.EndsWith("@ecommerce.api")) // To check on condition you can change this!
+                await _userManager.AddToRoleAsync(_user, "ADMIN");
+            else
+                await _userManager.AddToRoleAsync(_user, "USER");
+        }
         return result;
     }
 
     public async Task<bool> ValidateUser(UserForAuthDto user)
     {
         _user = await _userManager.FindByEmailAsync(user.Email);
-        var checkLogin =
-            _user != null && await _userManager.CheckPasswordAsync(_user, user.Password);
-        return checkLogin;
+        return _user != null && await _userManager.CheckPasswordAsync(_user, user.Password);
     }
 
     public async Task<string> CreateToke()
@@ -57,26 +63,29 @@ public class AuthenticationService : IAuthenticationService
         var secret = new SymmetricSecurityKey(key);
         var signingCred = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
 
-        // create claims
-        var claims = new List<Claim>() { new Claim(ClaimTypes.Name, "test") };
+        var claims = new List<Claim>()
+        {
+            new Claim("Id", _user.Id),
+            new Claim("Username", _user.UserName),
+            new Claim("Email", _user.Email)
+        };
         var roles = await _userManager.GetRolesAsync(_user);
         foreach (var role in roles)
         {
-            claims.Add(new Claim(ClaimTypes.Name, role));
+            claims.Add(new Claim(role.ToLower(), role));
         }
-
         // Generate Token
         return GetJwtSecurityToken(signingCred, claims);
     }
 
     private string GetJwtSecurityToken(SigningCredentials signingCredentials, List<Claim> claims)
     {
-        var jwtSettings = _configuration.GetSection("JwtSettings");
+        var jwtSettings = _options.Value;
         var tokenOptions = new JwtSecurityToken(
-            issuer: jwtSettings["ValidIssuer"],
-            audience: jwtSettings["ValidAudience"],
+            issuer: jwtSettings.validIssuer,
+            audience: jwtSettings.validAudience,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.expires)),
             signingCredentials: signingCredentials
         );
 
