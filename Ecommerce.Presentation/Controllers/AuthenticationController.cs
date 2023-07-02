@@ -21,15 +21,15 @@ public class AuthenticationController : ControllerBase
     [ServiceFilter(typeof(ValidationActionAttribute))]
     public async Task<IActionResult> Register([FromBody] UserForRegisterDto user)
     {
-        var result = await _serviceManager.AuthenticationService.RegisterUser(user);
-        return Ok(new { user, tokens = result });
+        var tokens = await _serviceManager.AuthenticationService.RegisterUser(user);
+        return Ok(new { user, tokens });
     }
 
     [HttpPost("login")]
     [ServiceFilter(typeof(ValidationActionAttribute))]
     public async Task<IActionResult> Login([FromBody] UserForAuthDto user)
     {
-        var result = await _serviceManager.AuthenticationService.ValidateUser(user);
-        return Ok(new { result });
+        var tokens = await _serviceManager.AuthenticationService.ValidateUser(user);
+        return Ok(new { tokens });
     }
 }
