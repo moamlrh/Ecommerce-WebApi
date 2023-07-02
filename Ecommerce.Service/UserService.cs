@@ -20,8 +20,7 @@ public class UserService : IUserService
     public async Task<IEnumerable<UserDto>> GetUsersAsync()
     {
         var users = await _repositoryManager.UsersRepository.GetUsersAsync();
-        var usersToReturn = _mapper.Map<IEnumerable<UserDto>>(users);
-        return usersToReturn;
+        return _mapper.Map<IEnumerable<UserDto>>(users);
     }
 
     public async Task<UserDto> GetUserByIdAsync(Guid Id)
@@ -29,9 +28,7 @@ public class UserService : IUserService
         var user = await _repositoryManager.UsersRepository.GetUserByIdAsync(Id);
         if (user == null)
             throw new UserNotFoundException(Id.ToString());
-
-        var userToReturn = _mapper.Map<UserDto>(user);
-        return userToReturn;
+        return _mapper.Map<UserDto>(user);
     }
 
     public async Task DeleteUserByIdAsync(Guid Id)

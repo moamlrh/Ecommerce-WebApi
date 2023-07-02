@@ -1,12 +1,14 @@
 ﻿using Ecommerce.Entities;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Presentation.Controllers;
 
 [Route("/api/users")]
 [ApiController]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
