@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿
+using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -47,6 +48,8 @@ public class TokenGenerator : ITokenGenerator
 
         var refreshToken = GenerateRefreshToken();
         _user.RefreshToken = refreshToken;
+        _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(1);
+
         await _userManager.UpdateAsync(_user);
 
         var options = GetJwtSecurityToken(signingCred, claims);
@@ -54,6 +57,17 @@ public class TokenGenerator : ITokenGenerator
         var accessToken = new JwtSecurityTokenHandler().WriteToken(options);
         var token = new TokenDto() { AccessToken = accessToken, RefreshToken = refreshToken };
         return token;
+    }
+
+    public async Task<TokenDto> RefreshToken(TokenDto token)
+    {
+        var principle = GetClaimsPrincipalFromExpiredToken(token.AccessToken);
+        var userId = principle.Claims.FirstOrDefault()?.Value;
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            throw new RefershTokenBadRequestException();
+        var newToken = await CreateToken(user);
+        return newToken;
     }
 
     private string GenerateRefreshToken()
@@ -82,7 +96,7 @@ public class TokenGenerator : ITokenGenerator
         SecurityToken securityToken;
         var principle = tokenHandler.ValidateToken(token, tokenVlaidationParameters, out securityToken);
         var jwtSecurityToken = securityToken as JwtSecurityToken;
-        if (jwtSecurityToken == null || jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             throw new SecurityTokenException("Invalid token");
 
         return principle;

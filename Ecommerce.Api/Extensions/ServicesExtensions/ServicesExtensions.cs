@@ -109,18 +109,18 @@ public static class ServicesExtensions
                 };
                 // To check if user in the database or not (has been removed)
                 // if not revoke the token
-                opts.Events = new JwtBearerEvents
-                {
-                    OnTokenValidated = context =>
-                    {
-                        var userManager = context.HttpContext.RequestServices.GetService<UserManager<User>>();
-                        var userEmail = context.Principal.FindFirst("Email")?.Value;
-                        var user = userManager.FindByEmailAsync(userEmail);
-                        if (user == null)
-                            context.Fail("UnAuthorized");
-                        return Task.CompletedTask;
-                    }
-                };
+                // opts.Events = new JwtBearerEvents
+                // {
+                //     OnTokenValidated = context =>
+                //     {
+                //         var userManager = context.HttpContext.RequestServices.GetService<UserManager<User>>();
+                //         var userEmail = context.Principal.FindFirst("Email")?.Value;
+                //         var user = userManager.FindByEmailAsync(userEmail);
+                //         if (user == null)
+                //             context.Fail("UnAuthorized");
+                //         return Task.CompletedTask;
+                //     }
+                // };
             });
     }
 }
