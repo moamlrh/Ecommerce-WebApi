@@ -27,15 +27,19 @@ public class UserService : IUserService
     public async Task<UserDto> GetUserByIdAsync(Guid Id)
     {
         var user = await _repositoryManager.UsersRepository.GetUserByIdAsync(Id);
+        if (user == null)
+            throw new UserNotFoundException(Id.ToString());
+
         var userToReturn = _mapper.Map<UserDto>(user);
         return userToReturn;
     }
 
-    public async Task DeleteUserByIdAsync(Guid Id) {
+    public async Task DeleteUserByIdAsync(Guid Id)
+    {
         var user = await _repositoryManager.UsersRepository.GetUserByIdAsync(Id);
-        if(user == null) 
+        if (user == null)
             throw new UserNotFoundException(Id.ToString());
-         _repositoryManager.UsersRepository.DeleteUserAsync(user);
+        _repositoryManager.UsersRepository.DeleteUser(user);
         await _repositoryManager.SaveAsync();
     }
 

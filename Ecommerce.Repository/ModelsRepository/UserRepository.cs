@@ -15,5 +15,5 @@ public class UserRepository : RepositoryBase<User>, IUserRepository
     public async Task<User> GetUserByIdAsync(Guid Id) =>
         await FindByCondition(user => user.Id.ToString() == Id.ToString()).FirstOrDefaultAsync();
     
-    public async void DeleteUserAsync(User user) => Delete(user);
+    public async void DeleteUser(User user) => Delete(user);
 }

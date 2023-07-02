@@ -6,5 +6,5 @@ public interface IUserRepository
 {
     Task<IEnumerable<User>> GetUsersAsync();
     Task<User> GetUserByIdAsync(Guid Id);
-    void DeleteUserAsync(User user);
+    void DeleteUser(User user);
 }

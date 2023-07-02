@@ -17,8 +17,6 @@ namespace Ecommerce.Api
             builder.Services.ConfigureApiBehaviorOptions(); // Extension
             builder.Services.AddSwaggerGen();
 
-            // Action Filter test
-            builder.Services.AddScoped<ValidationActionAttribute>();
 
             // Service Extensions
             builder.Services.ConfigureSqlServer(builder.Configuration);
@@ -29,6 +27,7 @@ namespace Ecommerce.Api
             builder.Services.AddAuthentication(); // Auth Identity
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureJWT(builder.Configuration);
+            builder.Services.AddScoped<ValidationActionAttribute>();
 
             var app = builder.Build();
 

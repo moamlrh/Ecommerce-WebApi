@@ -27,14 +27,13 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetUserById(Guid Id)
     {
         var user = await _serviceManager.UsersService.GetUserByIdAsync(Id);
-        if (user == null)
-            throw new UserNotFoundException(Id.ToString());
         return Ok(user);
     }
 
-    [HttpDelete("{id:guid}",Name ="DeletUser")]
-    public async Task<IActionResult> DeleteUserById(Guid Id){
+    [HttpDelete("{id:guid}", Name = "DeletUser")]
+    public async Task<IActionResult> DeleteUserById(Guid Id)
+    {
         await _serviceManager.UsersService.DeleteUserByIdAsync(Id);
-        return Ok();
+        return Ok("done");
     }
 }
