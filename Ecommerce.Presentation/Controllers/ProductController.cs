@@ -15,9 +15,10 @@ public class ProductController : ControllerBase
     public ProductController(IServiceManager serviceManager) => _serviceManager = serviceManager;
 
     [HttpGet(Name = "GetAll")]
-    public async Task<IActionResult> GetAllProducts()
+    [ServiceFilter(typeof(ValidationProductAttribute))]
+    public async Task<IActionResult> GetAllProducts([FromQuery] ProductParameters parameters)
     {
-        var products = await _serviceManager.ProductService.GetAllAsync();
+        var products = await _serviceManager.ProductService.GetAllAsync(parameters);
         return Ok(products);
     }
 

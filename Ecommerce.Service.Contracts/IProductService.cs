@@ -5,7 +5,7 @@ namespace Ecommerce.Service.Contracts;
 
 public interface IProductService
 {
-    public Task<IEnumerable<ProductDto>> GetAllAsync();
+    public Task<IEnumerable<ProductDto>> GetAllAsync(ProductParameters parameters);
     public Task<ProductDto> GetByIdAsync(Guid Id);
     public Task<ProductDto> AddAsync(ProductToAddDto product, string userId);
     public Task DeleteByIdAsync(Guid Id);

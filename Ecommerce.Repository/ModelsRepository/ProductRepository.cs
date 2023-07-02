@@ -9,7 +9,8 @@ public class ProductRepository : RepositoryBase<Product>, IProductRepository
     public ProductRepository(RepositoryContext context)
         : base(context) { }
 
-    public async Task<IEnumerable<Product>> GetAllAsync() => await FindAll().ToArrayAsync();
+    public async Task<IEnumerable<Product>> GetAllAsync(ProductParameters parameters) =>
+                await FindAll().OrderBy(e => e.Name).Skip((parameters.PageNumber - 1) * parameters.PageSize).Take(parameters.PageSize).ToArrayAsync();
 
     public async Task<Product> GetByIdAsync(Guid Id) =>
         await FindByCondition(p => p.Id == Id).Include(e => e.User).SingleOrDefaultAsync();

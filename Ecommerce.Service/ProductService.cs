@@ -39,9 +39,9 @@ public class ProductService : IProductService
         await _repositoryManager.SaveAsync();
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllAsync()
+    public async Task<IEnumerable<ProductDto>> GetAllAsync(ProductParameters parameters)
     {
-        var products = await _repositoryManager.ProductsRepository.GetAllAsync();
+        var products = await _repositoryManager.ProductsRepository.GetAllAsync(parameters);
         var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
         return productsDto;
     }

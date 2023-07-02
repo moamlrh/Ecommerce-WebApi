@@ -25,6 +25,7 @@ namespace Ecommerce.Api
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureJWT(builder.Configuration);
             builder.Services.AddScoped<ValidationActionAttribute>();
+            builder.Services.AddScoped<ValidationProductAttribute>();
 
             var app = builder.Build();
 
