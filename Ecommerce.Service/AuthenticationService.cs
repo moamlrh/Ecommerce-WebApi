@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Security.Cryptography;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using AutoMapper;
@@ -20,23 +21,23 @@ public class AuthenticationService : IAuthenticationService
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    private readonly IOptions<JWTOptions> _options;
+    private readonly ITokenGenerator _tokenGenerator;
     private User? _user;
 
     public AuthenticationService(
         IRepositoryManager repositoryManager,
         IMapper mapper,
         UserManager<User> userManager,
-        IOptions<JWTOptions> options
+        ITokenGenerator tokenGenerator
     )
     {
         _repositoryManager = repositoryManager;
         _mapper = mapper;
         _userManager = userManager;
-        _options = options;
+        _tokenGenerator = tokenGenerator;
     }
 
-    public async Task<IdentityResult> RegisterUser(UserForRegisterDto user)
+    public async Task<TokenDto> RegisterUser(UserForRegisterDto user)
     {
         _user = _mapper.Map<User>(user);
         var result = await _userManager.CreateAsync(_user, user.Password);
@@ -44,51 +45,15 @@ public class AuthenticationService : IAuthenticationService
             throw new UnauthorizedAccessException("Error while creating user");
 
         await _userManager.AddToRoleAsync(_user, "USER");
-        return result;
+        return await _tokenGenerator.CreateToken(_user);
     }
 
-    public async Task<bool> ValidateUser(UserForAuthDto user)
+    public async Task<TokenDto> ValidateUser(UserForAuthDto user)
     {
         _user = await _userManager.FindByEmailAsync(user.Email);
         var succeeded = _user != null && await _userManager.CheckPasswordAsync(_user, user.Password);
         if (!succeeded)
             throw new UserLoginFaildException();
-        return succeeded;
-    }
-
-    public async Task<string> CreateToke()
-    {
-        // create signing credentials
-        var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY"));
-        var secret = new SymmetricSecurityKey(key);
-        var signingCred = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
-
-        var claims = new List<Claim>()
-        {
-            new Claim("Id", _user.Id),
-            new Claim("Username", _user.UserName),
-            new Claim("Email", _user.Email)
-        };
-        var roles = await _userManager.GetRolesAsync(_user);
-        foreach (var role in roles)
-        {
-            claims.Add(new Claim(role.ToLower(), role));
-        }
-        // Generate Token
-        return GetJwtSecurityToken(signingCred, claims);
-    }
-
-    private string GetJwtSecurityToken(SigningCredentials signingCredentials, List<Claim> claims)
-    {
-        var jwtSettings = _options.Value;
-        var tokenOptions = new JwtSecurityToken(
-            issuer: jwtSettings.validIssuer,
-            audience: jwtSettings.validAudience,
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.expires)),
-            signingCredentials: signingCredentials
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        return await _tokenGenerator.CreateToken(_user);
     }
 }

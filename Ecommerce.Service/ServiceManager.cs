@@ -19,13 +19,14 @@ public class ServiceManager : IServiceManager
         IRepositoryManager repoManager,
         IMapper mapper,
         UserManager<User> userManager,
-        IOptions<JWTOptions> options
+        IOptions<JWTOptions> options,
+        ITokenGenerator tokenGenerator
     )
     {
         userService = new(() => new UserService(repoManager, mapper));
         productService = new(() => new ProductService(repoManager, mapper));
         authService = new(
-            () => new AuthenticationService(repoManager, mapper, userManager, options)
+            () => new AuthenticationService(repoManager, mapper, userManager, tokenGenerator)
         );
     }
 

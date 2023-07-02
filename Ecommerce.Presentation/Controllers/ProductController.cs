@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Ecommerce.Entities;
-using Ecommerce.Presentation.Actions;
+﻿using Ecommerce.Presentation.Actions;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +12,6 @@ namespace Ecommerce.Presentation.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
-
     public ProductController(IServiceManager serviceManager) => _serviceManager = serviceManager;
 
     [HttpGet(Name = "GetAll")]
@@ -44,7 +41,7 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> DeleteProduct(Guid Id)
     {
         await _serviceManager.ProductService.DeleteByIdAsync(Id);
-        return Ok("done");
+        return Ok();
     }
 
 }

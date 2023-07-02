@@ -84,6 +84,7 @@ public static class ServicesExtensions
     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<JWTOptions>(configuration.GetSection("JWTOptions"));
+        services.AddTransient<ITokenGenerator, TokenGenerator>();
 
         var jwtSettings = configuration.GetSection("JWTOptions");
         var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");

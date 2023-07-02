@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Runtime.Intrinsics.X86;
+using System.ComponentModel.DataAnnotations;
 using Ecommerce.Entities;
 using Ecommerce.Presentation.Actions;
 using Ecommerce.Service.Contracts;
@@ -29,7 +30,7 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> Login([FromBody] UserForAuthDto user)
     {
         var result = await _serviceManager.AuthenticationService.ValidateUser(user);
-        var Token = await _serviceManager.AuthenticationService.CreateToke();
-        return Ok(new { Token });
+        // var Token = await _serviceManager.AuthenticationService.CreateToke();
+        return Ok(new { result });
     }
 }

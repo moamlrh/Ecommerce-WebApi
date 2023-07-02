@@ -5,7 +5,7 @@ namespace Ecommerce.Service.Contracts;
 
 public interface IAuthenticationService
 {
-    Task<IdentityResult> RegisterUser(UserForRegisterDto user);
-    Task<bool> ValidateUser(UserForAuthDto user);
-    Task<string> CreateToke();
+    Task<TokenDto> RegisterUser(UserForRegisterDto user);
+    Task<TokenDto> ValidateUser(UserForAuthDto user);
+    // Task<TokenDto> CreateToke();
 }

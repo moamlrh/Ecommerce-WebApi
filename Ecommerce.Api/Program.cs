@@ -1,8 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using Ecommerce.Api.Extensions;
-using Ecommerce.Presentation;
 using Ecommerce.Presentation.Actions;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api
 {
