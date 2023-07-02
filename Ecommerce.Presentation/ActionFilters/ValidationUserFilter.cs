@@ -12,6 +12,7 @@ public class ValidationUserFilter : IActionFilter
         var action = context.RouteData.Values["action"];
         var controller = context.RouteData.Values["controller"];
         var user = context.ActionArguments["user"];
+
         if (user == null)
         {
             context.Result = new UnprocessableEntityObjectResult(context.ModelState);

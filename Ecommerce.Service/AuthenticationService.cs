@@ -40,20 +40,20 @@ public class AuthenticationService : IAuthenticationService
     {
         _user = _mapper.Map<User>(user);
         var result = await _userManager.CreateAsync(_user, user.Password);
-        if (result.Succeeded)
-        {
-            if (_user.Email.EndsWith("@ecommerce.api")) // To check on condition you can change this!
-                await _userManager.AddToRoleAsync(_user, "ADMIN");
-            else
-                await _userManager.AddToRoleAsync(_user, "USER");
-        }
+        if (!result.Succeeded)
+            throw new UnauthorizedAccessException("Error while creating user");
+
+        await _userManager.AddToRoleAsync(_user, "USER");
         return result;
     }
 
     public async Task<bool> ValidateUser(UserForAuthDto user)
     {
         _user = await _userManager.FindByEmailAsync(user.Email);
-        return _user != null && await _userManager.CheckPasswordAsync(_user, user.Password);
+        var succeeded = _user != null && await _userManager.CheckPasswordAsync(_user, user.Password);
+        if (!succeeded)
+            throw new UserLoginFaildException();
+        return succeeded;
     }
 
     public async Task<string> CreateToke()
