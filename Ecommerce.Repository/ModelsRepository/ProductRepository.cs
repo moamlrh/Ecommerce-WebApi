@@ -4,7 +4,6 @@ using Ecommerce.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Repository;
-
 public class ProductRepository : RepositoryBase<Product>, IProductRepository
 {
     public ProductRepository(RepositoryContext context)
@@ -16,4 +15,6 @@ public class ProductRepository : RepositoryBase<Product>, IProductRepository
         await FindByCondition(p => p.Id == Id).Include(e => e.User).SingleOrDefaultAsync();
 
     public void Add(Product product) => Create(product);
+
+    public void Delete(Product product) => base.Delete(product);
 }

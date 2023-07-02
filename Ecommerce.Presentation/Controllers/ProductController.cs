@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Ecommerce.Entities;
+using Ecommerce.Presentation.Actions;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -31,11 +32,18 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("add")]
-    [ServiceFilter(typeof(ValidationAttribute))]
+    [ServiceFilter(typeof(ValidationActionAttribute))]
     public async Task<IActionResult> AddProduct([FromBody] ProductToAddDto product)
     {
         var userId = User.Claims.FirstOrDefault()?.Value;
         var _product = await _serviceManager.ProductService.AddAsync(product, userId);
         return Ok(_product);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task DeleteProduct(Guid Id)
+    {
+        await _serviceManager.ProductService.DeleteByIdAsync(Id);
+    }
+
 }

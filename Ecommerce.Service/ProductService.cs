@@ -29,6 +29,16 @@ public class ProductService : IProductService
         return _mapper.Map<ProductDto>(product);
     }
 
+    public async Task DeleteByIdAsync(Guid Id)
+    {
+        var productToDelete = await _repositoryManager.ProductsRepository.GetByIdAsync(Id);
+        if (productToDelete == null)
+            throw new ProductNotFoundException(Id);
+
+        _repositoryManager.ProductsRepository.Delete(productToDelete);
+        await _repositoryManager.SaveAsync();
+    }
+
     public async Task<IEnumerable<ProductDto>> GetAllAsync()
     {
         var products = await _repositoryManager.ProductsRepository.GetAllAsync();

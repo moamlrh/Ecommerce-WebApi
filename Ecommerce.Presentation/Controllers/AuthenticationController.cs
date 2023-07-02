@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Ecommerce.Entities;
+using Ecommerce.Presentation.Actions;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ public class AuthenticationController : ControllerBase
         _serviceManager = serviceManager;
 
     [HttpPost("register", Name = "registerNewUser")]
-    [ServiceFilter(typeof(ValidationAttribute))]
+    [ServiceFilter(typeof(ValidationActionAttribute))]
     public async Task<IActionResult> Register([FromBody] UserForRegisterDto user)
     {
         var result = await _serviceManager.AuthenticationService.RegisterUser(user);
@@ -24,7 +25,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("login")]
-    [ServiceFilter(typeof(ValidationAttribute))]
+    [ServiceFilter(typeof(ValidationActionAttribute))]
     public async Task<IActionResult> Login([FromBody] UserForAuthDto user)
     {
         var result = await _serviceManager.AuthenticationService.ValidateUser(user);
