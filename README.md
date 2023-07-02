@@ -4,9 +4,9 @@
 
 ## Features 
  - Asp.net core webapi 8
- - Entity framewrok 
- - SqlServer 
- - Identity/Jwt (json web tokens) and Refresh token for Auth
+ - Entity framewrok 8
+ - SqlServer
+ - Identity/Jwt tokens and Refresh tokens for Auth
  - AutoMapper
  - Clean Architecture
  - Repository Pattern
