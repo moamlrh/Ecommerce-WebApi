@@ -70,7 +70,7 @@ public class CartService : ICartService
         if (cart == null || product == null)
             throw new Exception("Could not find product/cart");
 
-        var cartItems = cart.CartItems.Where(p => p.Id != product.Id).ToList();
+        var cartItems = cart.CartItems.Where(p => p.Product.Id != ProductId).ToList();
         cart.CartItems = cartItems;
 
         await _repositoryManager.CartRepository.UpdateCart(cart);
