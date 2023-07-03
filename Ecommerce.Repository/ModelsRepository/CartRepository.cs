@@ -13,15 +13,23 @@ public class CartRepository : RepositoryBase<Cart>, ICartRepository
         _context = context;
     }
 
-    public void CreateCart(Cart cart) => Create(cart);
+    public async Task CreateCart(Cart cart) => Create(cart);
+    public async Task UpdateCart(Cart cart) => Update(cart);
     public void DeleteCart(Cart cart) => Delete(cart);
-    public void UpdateCart(Cart cart) => Update(cart);
-    public void AddProductToCart(Cart cart) {
-        
+    public void AddProductToCart(Cart cart)
+    {
     }
-    public async Task<Cart> GetCartAsync(Guid Id) =>
-                await FindByCondition(x => x.Id == Id).Include(x => x.User).FirstOrDefaultAsync();
-    public async Task<Cart> GetCartByUserIdAsync(Guid UserId) =>
-                await FindByCondition(x => x.User.Id.ToString() == UserId.ToString()).FirstOrDefaultAsync();
+    public async Task<Cart> GetCartByIdAsync(Guid Id) =>
+                await FindByCondition(x => x.Id == Id)
+                .Include(x => x.CartItems)
+                .ThenInclude(x => x.Product)
+                .FirstOrDefaultAsync();
+    public async Task<Cart> GetCartByUserIdAsync(string UserId) =>
+                await FindByCondition(x => x.UserId == UserId)
+                .Include(x => x.CartItems)
+                .ThenInclude(x => x.Product)
+                .FirstOrDefaultAsync();
 
+    public async Task<IEnumerable<Cart>> GetAllCarts(string UserId) =>
+                await FindByCondition(x => x.UserId == UserId).ToListAsync();
 }

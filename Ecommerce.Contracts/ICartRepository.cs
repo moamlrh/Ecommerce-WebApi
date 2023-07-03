@@ -5,11 +5,11 @@ namespace Ecommerce.Contracts;
 
 public interface ICartRepository
 {
-    Task<Cart> GetCartAsync(Guid Id);
-    Task<Cart> GetCartByUserIdAsync(Guid UserId);
+    Task<Cart> GetCartByIdAsync(Guid Id);
+    Task<Cart> GetCartByUserIdAsync(string UserId);
     // void AddProductAsync(Product product);
-    void CreateCart(Cart cart);
+    Task<IEnumerable<Cart>> GetAllCarts(string UserId);
+    Task CreateCart(Cart cart);
     void DeleteCart(Cart cart);
-    void UpdateCart(Cart cart);
-
+    Task UpdateCart(Cart cart);
 }

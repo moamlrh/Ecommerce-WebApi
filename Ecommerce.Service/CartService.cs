@@ -1,11 +1,9 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Ecommerce.Contracts;
 using Ecommerce.Entities;
 using Ecommerce.Entities.Models;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
-using Microsoft.AspNetCore.Identity;
 
 namespace Ecommerce.Service;
 
@@ -20,30 +18,36 @@ public class CartService : ICartService
         _mapper = mapper;
     }
 
-    public async Task CreateCartAsync(string UserId)
+    public async Task<Cart> CreateCartAsync(string UserId)
     {
-        var newCart = new Cart
+        var cart = new Cart
         {
             UserId = UserId.ToString(),
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
-        _repositoryManager.CartRepository.CreateCart(newCart);
+        await _repositoryManager.CartRepository.CreateCart(cart);
         await _repositoryManager.SaveAsync();
+        return cart;
     }
 
-    public Task DeleteCartByIdAsync(Guid Id)
+    public async Task DeleteCartByIdAsync(Guid Id)
     {
-        throw new NotImplementedException();
+        var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(Id);
+        _repositoryManager.CartRepository.DeleteCart(cart);
+        await _repositoryManager.SaveAsync();
     }
 
     public async Task<CartDto> GetCartByIdAsync(Guid Id)
     {
-        var cart = await _repositoryManager.CartRepository.GetCartAsync(Id);
+        var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(Id);
         if (cart == null)
-            throw new Exception("Cart not found!");
+            throw new Exception("Cart was not found!");
 
+        var prodcuts = cart.CartItems.Select(c => c.Product);
+        var productsDto = _mapper.Map<IEnumerable<ProductDto>>(prodcuts);
         var cartDto = _mapper.Map<CartDto>(cart);
+        cartDto.Products = productsDto;
         return cartDto;
     }
 
@@ -51,22 +55,68 @@ public class CartService : ICartService
     {
         throw new NotImplementedException();
     }
+    public async Task<IEnumerable<CartDto>> GetAllCartsByUserIdAsync(string UserId)
+    {
+        var carts = await _repositoryManager.CartRepository.GetAllCarts(UserId);
+        var cartsDto = _mapper.Map<IEnumerable<CartDto>>(carts);
+        return cartsDto;
+    }
 
+    public async Task RemoveProductFromCartAsync(Guid CartId, Guid ProductId)
+    {
+        var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(CartId);
+        var product = await _repositoryManager.ProductsRepository.GetByIdAsync(ProductId);
+
+        if (cart == null || product == null)
+            throw new Exception("Could not find product/cart");
+
+        var cartItems = cart.CartItems.Where(p => p.Id != product.Id).ToList();
+        cart.CartItems = cartItems;
+
+        await _repositoryManager.CartRepository.UpdateCart(cart);
+        await _repositoryManager.SaveAsync();
+    }
     public Task UpdateCartAsync(CartDto cart)
     {
         throw new NotImplementedException();
     }
     public async Task AddProductToCartAsync(string UserId, string ProductId)
     {
+        // if the products exist
         var product = await _repositoryManager.ProductsRepository.GetByIdAsync(new Guid(ProductId));
-        var cart = await _repositoryManager.CartRepository.GetCartByUserIdAsync(new Guid(UserId));
+        if (product == null)
+            throw new ProductNotFoundException(new Guid(ProductId));
+
+        // get cart by user id
+        var cart = await _repositoryManager.CartRepository.GetCartByUserIdAsync(UserId);
+        // if cart doesn't exist
         if (cart == null)
+            cart = await CreateCartAsync(UserId);
+
+
+        var ProductFromCart = cart.CartItems.FirstOrDefault(p => p.ProductId == Guid.Parse(ProductId));
+        // if product doesn't exists in the cart
+        if (ProductFromCart == null)
         {
-            await CreateCartAsync(UserId);
-            await AddProductToCartAsync(UserId, ProductId);
-            return;
+            // add product to the cart and increase the quantity 
+            var prodcutToAdd = new CartItem()
+            {
+                CartId = cart.Id,
+                ProductId = product.Id,
+                Quantity = 1
+            };
+            cart.CartItems.Add(prodcutToAdd);
         }
-        cart.Products.Add(product);
+        // if product already exists in the cart
+        else
+        {
+            // increase the quantity
+            ProductFromCart.Quantity++;
+        }
+
+        cart.TotalPrice += product.Price;
+        await _repositoryManager.CartRepository.UpdateCart(cart);
         await _repositoryManager.SaveAsync();
     }
+
 }
