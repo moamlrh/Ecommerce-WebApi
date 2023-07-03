@@ -11,13 +11,11 @@ public class CartService : ICartService
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
-
     public CartService(IRepositoryManager repositoryManager, IMapper mapper)
     {
         _repositoryManager = repositoryManager;
         _mapper = mapper;
     }
-
     public async Task<Cart> CreateCartAsync(string UserId)
     {
         var cart = new Cart
@@ -30,14 +28,12 @@ public class CartService : ICartService
         await _repositoryManager.SaveAsync();
         return cart;
     }
-
     public async Task DeleteCartByIdAsync(Guid Id)
     {
         var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(Id);
         _repositoryManager.CartRepository.DeleteCart(cart);
         await _repositoryManager.SaveAsync();
     }
-
     public async Task<CartDto> GetCartByIdAsync(Guid Id)
     {
         var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(Id);
@@ -50,22 +46,10 @@ public class CartService : ICartService
         cartDto.Products = productsDto;
         return cartDto;
     }
-
-    public Task<CartDto> GetCartByUserIdAsync(string UserId)
-    {
-        throw new NotImplementedException();
-    }
-    public async Task<IEnumerable<CartDto>> GetAllCartsByUserIdAsync(string UserId)
-    {
-        var carts = await _repositoryManager.CartRepository.GetAllCarts(UserId);
-        var cartsDto = _mapper.Map<IEnumerable<CartDto>>(carts);
-        return cartsDto;
-    }
-
     public async Task RemoveProductFromCartAsync(Guid CartId, Guid ProductId)
     {
         var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(CartId);
-        var product = await _repositoryManager.ProductsRepository.GetByIdAsync(ProductId);
+        var product = await _repositoryManager.ProductsRepository.GetProductByIdAsync(ProductId);
 
         if (cart == null || product == null)
             throw new Exception("Could not find product/cart");
@@ -76,14 +60,10 @@ public class CartService : ICartService
         await _repositoryManager.CartRepository.UpdateCart(cart);
         await _repositoryManager.SaveAsync();
     }
-    public Task UpdateCartAsync(CartDto cart)
-    {
-        throw new NotImplementedException();
-    }
     public async Task AddProductToCartAsync(string UserId, string ProductId)
     {
         // if the products exist
-        var product = await _repositoryManager.ProductsRepository.GetByIdAsync(new Guid(ProductId));
+        var product = await _repositoryManager.ProductsRepository.GetProductByIdAsync(new Guid(ProductId));
         if (product == null)
             throw new ProductNotFoundException(new Guid(ProductId));
 

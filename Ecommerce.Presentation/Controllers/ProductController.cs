@@ -18,14 +18,14 @@ public class ProductController : ControllerBase
     [ServiceFilter(typeof(ValidationProductAttribute))]
     public async Task<IActionResult> GetAllProducts([FromQuery] ProductParameters parameters)
     {
-        var products = await _serviceManager.ProductService.GetAllAsync(parameters);
+        var products = await _serviceManager.ProductService.GetAllProductsAsync(parameters);
         return Ok(products);
     }
 
     [HttpGet("{id:guid}", Name = "GetById")]
     public async Task<IActionResult> GetProductById(Guid Id)
     {
-        var product = await _serviceManager.ProductService.GetByIdAsync(Id);
+        var product = await _serviceManager.ProductService.GetProductByIdAsync(Id);
         return Ok(product);
     }
 
@@ -34,14 +34,14 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> AddProduct([FromBody] ProductToAddDto product)
     {
         var userId = User.Claims.FirstOrDefault()?.Value;
-        var _product = await _serviceManager.ProductService.AddAsync(product, userId);
+        var _product = await _serviceManager.ProductService.CreateProductAsync(product, userId);
         return Ok(_product);
     }
 
     [HttpDelete("{id:guid}", Name = "DeleteProduct")]
     public async Task<IActionResult> DeleteProduct(Guid Id)
     {
-        await _serviceManager.ProductService.DeleteByIdAsync(Id);
+        await _serviceManager.ProductService.DeleteProductByIdAsync(Id);
         return Ok();
     }
 

@@ -20,35 +20,35 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task<ProductDto> AddAsync(ProductToAddDto productToAdd, string userId)
+    public async Task<ProductDto> CreateProductAsync(ProductToAddDto productToAdd, string userId)
     {
         var product = _mapper.Map<Product>(productToAdd);
         product.UserId = userId;
-        _repositoryManager.ProductsRepository.Add(product);
+        _repositoryManager.ProductsRepository.AddProduct(product);
         await _repositoryManager.SaveAsync();
         return _mapper.Map<ProductDto>(product);
     }
 
-    public async Task DeleteByIdAsync(Guid Id)
+    public async Task DeleteProductByIdAsync(Guid Id)
     {
-        var productToDelete = await _repositoryManager.ProductsRepository.GetByIdAsync(Id);
+        var productToDelete = await _repositoryManager.ProductsRepository.GetProductByIdAsync(Id);
         if (productToDelete == null)
             throw new ProductNotFoundException(Id);
 
-        _repositoryManager.ProductsRepository.Delete(productToDelete);
+        _repositoryManager.ProductsRepository.DeleteProduct(productToDelete);
         await _repositoryManager.SaveAsync();
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllAsync(ProductParameters parameters)
+    public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductParameters parameters)
     {
-        var products = await _repositoryManager.ProductsRepository.GetAllAsync(parameters);
+        var products = await _repositoryManager.ProductsRepository.GetAllProductsAsync(parameters);
         var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
         return productsDto;
     }
 
-    public async Task<ProductDto> GetByIdAsync(Guid Id)
+    public async Task<ProductDto> GetProductByIdAsync(Guid Id)
     {
-        var _product = await _repositoryManager.ProductsRepository.GetByIdAsync(Id);
+        var _product = await _repositoryManager.ProductsRepository.GetProductByIdAsync(Id);
         var product = _mapper.Map<ProductDto>(_product);
         if (product is null)
             throw new ProductNotFoundException(Id);

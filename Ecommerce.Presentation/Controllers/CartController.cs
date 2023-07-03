@@ -15,14 +15,6 @@ public class CartController : ControllerBase
     private readonly IServiceManager _serviceManager;
     public CartController(IServiceManager serviceManager) => _serviceManager = serviceManager;
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllCartsForCurrentUser()
-    {
-        var userId = User.FindFirst("Id")?.Value;
-        var carts = await _serviceManager.CartService.GetAllCartsByUserIdAsync(userId);
-        return Ok(carts);
-    }
-
     [HttpGet("{CartId:guid}")]
     public async Task<IActionResult> GetCartById(Guid CartId)
     {

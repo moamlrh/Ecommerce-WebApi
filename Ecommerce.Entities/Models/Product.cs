@@ -12,9 +12,11 @@ public class Product
     [MinLength(1)]
     [MaxLength(255)]
     public string Name { get; set; }
+
     [Column(TypeName = "decimal(15,2)")]
     [Range(0, int.MaxValue)]
     public decimal Price { get; set; }
+
     [Required]
     [MinLength(5)]
     public string Description { get; set; }

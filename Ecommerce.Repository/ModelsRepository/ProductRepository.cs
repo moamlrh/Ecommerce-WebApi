@@ -9,14 +9,16 @@ public class ProductRepository : RepositoryBase<Product>, IProductRepository
     public ProductRepository(RepositoryContext context)
         : base(context) { }
 
-    public void Add(Product product) => Create(product);
-    public void Delete(Product product) => base.Delete(product);
-    public async Task<IEnumerable<Product>> GetAllAsync(ProductParameters parameters) =>
+    public void AddProduct(Product product) => Create(product);
+    public void DeleteProduct(Product product) => base.Delete(product);
+    public async Task<IEnumerable<Product>> GetAllProductsAsync(ProductParameters parameters) =>
                 await FindAll()
-                            .OrderBy(e => e.Name)
-                            .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-                            .Take(parameters.PageSize)
-                            .ToArrayAsync();
-    public async Task<Product> GetByIdAsync(Guid Id) =>
-                await FindByCondition(p => p.Id == Id).Include(e => e.User).SingleOrDefaultAsync();
+                .OrderBy(p => p.Name)
+                .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .ToArrayAsync();
+    public async Task<Product> GetProductByIdAsync(Guid Id) =>
+                await FindByCondition(p => p.Id == Id)
+                .Include(e => e.User)
+                .SingleOrDefaultAsync();
 }

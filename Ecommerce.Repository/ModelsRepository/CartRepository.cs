@@ -16,20 +16,17 @@ public class CartRepository : RepositoryBase<Cart>, ICartRepository
     public async Task CreateCart(Cart cart) => Create(cart);
     public async Task UpdateCart(Cart cart) => Update(cart);
     public void DeleteCart(Cart cart) => Delete(cart);
-    public void AddProductToCart(Cart cart)
-    {
-    }
     public async Task<Cart> GetCartByIdAsync(Guid Id) =>
-                await FindByCondition(x => x.Id == Id)
+                await FindByCondition(cart => cart.Id == Id)
                 .Include(x => x.CartItems)
                 .ThenInclude(x => x.Product)
                 .FirstOrDefaultAsync();
     public async Task<Cart> GetCartByUserIdAsync(string UserId) =>
-                await FindByCondition(x => x.UserId == UserId)
+                await FindByCondition(cart => cart.UserId == UserId)
                 .Include(x => x.CartItems)
                 .ThenInclude(x => x.Product)
                 .FirstOrDefaultAsync();
 
     public async Task<IEnumerable<Cart>> GetAllCarts(string UserId) =>
-                await FindByCondition(x => x.UserId == UserId).ToListAsync();
+                await FindByCondition(cart => cart.UserId == UserId).ToListAsync();
 }
