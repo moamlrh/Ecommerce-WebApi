@@ -14,7 +14,9 @@
  - UoW pattern
  - Others
 
-## To Run 
+
+## Run / Test The API 
+### I suggest, using `Postman` or `Swagger` (has been implemented by default with the API) They're very helpfull!
 ```
 git clone git@github.com:moamlrh/Ecommerce-WebApi.git
 ```
