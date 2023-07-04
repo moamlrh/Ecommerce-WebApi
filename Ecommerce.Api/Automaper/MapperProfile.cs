@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using Ecommerce.Entities.Models;
 using Ecommerce.Shared;
 
@@ -8,13 +9,15 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<User, UserDto>().ReverseMap(); //.ForMember(e => e.Id, opts => opts.MapFrom(e => e.Id));
+        CreateMap<User, UserDto>().ReverseMap();
         CreateMap<User, UserForRegisterDto>().ReverseMap();
+
 
         CreateMap<Product, ProductDto>().ReverseMap();
         CreateMap<Product, ProductToAddDto>().ReverseMap();
 
 
         CreateMap<Cart, CartDto>().ReverseMap();
+        CreateMap<CartItem, CartItemDto>().ReverseMap();
     }
 }
