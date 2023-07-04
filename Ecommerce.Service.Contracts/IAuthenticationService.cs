@@ -1,5 +1,4 @@
 ﻿using Ecommerce.Shared;
-using Microsoft.AspNetCore.Identity;
 
 namespace Ecommerce.Service.Contracts;
 

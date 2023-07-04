@@ -1,18 +1,10 @@
-﻿using System.Security.Cryptography;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using AutoMapper;
-using Ecommerce.Api.JwtConfig;
+﻿using AutoMapper;
 using Ecommerce.Contracts;
 using Ecommerce.Entities;
 using Ecommerce.Entities.Models;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Ecommerce.Service;
 

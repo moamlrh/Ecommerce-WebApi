@@ -1,11 +1,9 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Ecommerce.Contracts;
 using Ecommerce.Entities;
 using Ecommerce.Entities.Models;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
-using Microsoft.AspNetCore.Identity;
 
 namespace Ecommerce.Service;
 

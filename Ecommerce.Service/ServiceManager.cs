@@ -4,7 +4,6 @@ using Ecommerce.Contracts;
 using Ecommerce.Entities.Models;
 using Ecommerce.Service.Contracts;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace Ecommerce.Service;

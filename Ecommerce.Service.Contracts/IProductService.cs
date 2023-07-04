@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Ecommerce.Shared;
+﻿using Ecommerce.Shared;
 
 namespace Ecommerce.Service.Contracts;
 
