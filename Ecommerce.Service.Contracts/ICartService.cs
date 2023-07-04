@@ -11,6 +11,6 @@ public interface ICartService
     public Task DeleteCartByIdAsync(Guid Id);
     public Task AddProductToCartAsync(string UserId, string ProductId);
     public Task RemoveProductFromCartAsync(Guid CartId, Guid ProductId);
-
+    public Task ChangeProductQunatityAsync(Guid CartId, Guid ProductId, int Quantity);
 }
 

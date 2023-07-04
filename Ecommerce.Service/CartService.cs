@@ -40,63 +40,76 @@ public class CartService : ICartService
         if (cart == null)
             throw new Exception("Cart was not found!");
 
-        var prodcuts = cart.CartItems.Select(c => c.Product);
-        var productsDto = _mapper.Map<IEnumerable<ProductDto>>(prodcuts);
+        var cartItems = _mapper.Map<IEnumerable<CartItemDto>>(cart.CartItems);
         var cartDto = _mapper.Map<CartDto>(cart);
-        cartDto.Products = productsDto;
+        cartDto.CartItems = cartItems;
         return cartDto;
     }
     public async Task RemoveProductFromCartAsync(Guid CartId, Guid ProductId)
     {
         var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(CartId);
-        var product = await _repositoryManager.ProductsRepository.GetProductByIdAsync(ProductId);
-
-        if (cart == null || product == null)
+        if (cart == null)
             throw new Exception("Could not find product/cart");
 
-        var cartItems = cart.CartItems.Where(p => p.Product.Id != ProductId).ToList();
-        cart.CartItems = cartItems;
+        var cartItem = cart.CartItems.Where(p => p.Product.Id == ProductId).FirstOrDefault(); // Get product
+        if (cartItem == null)
+            throw new ProductNotFoundException(ProductId);
 
-        await _repositoryManager.CartRepository.UpdateCart(cart);
+        var cartItems = cart.CartItems.Where(p => p.Product.Id != ProductId).ToList(); // Get cart items with the product
+        cart.CartItems = cartItems;
+        cart.TotalPrice -= cartItem.Product.Price;
+
         await _repositoryManager.SaveAsync();
     }
     public async Task AddProductToCartAsync(string UserId, string ProductId)
     {
-        // if the products exist
         var product = await _repositoryManager.ProductsRepository.GetProductByIdAsync(new Guid(ProductId));
         if (product == null)
             throw new ProductNotFoundException(new Guid(ProductId));
 
-        // get cart by user id
         var cart = await _repositoryManager.CartRepository.GetCartByUserIdAsync(UserId);
-        // if cart doesn't exist
         if (cart == null)
             cart = await CreateCartAsync(UserId);
 
-
-        var ProductFromCart = cart.CartItems.FirstOrDefault(p => p.ProductId == Guid.Parse(ProductId));
-        // if product doesn't exists in the cart
-        if (ProductFromCart == null)
+        // if the product is already in cart or not
+        var cartItem = cart.CartItems.Where(p => p.ProductId == Guid.Parse(ProductId)).FirstOrDefault();
+        if (cartItem == null)
         {
-            // add product to the cart and increase the quantity 
-            var prodcutToAdd = new CartItem()
+            cart.CartItems.Add(new()
             {
+                Quantity = 1,
                 CartId = cart.Id,
                 ProductId = product.Id,
-                Quantity = 1
-            };
-            cart.CartItems.Add(prodcutToAdd);
+            });
         }
-        // if product already exists in the cart
         else
         {
-            // increase the quantity
-            ProductFromCart.Quantity++;
+            cartItem.Quantity++;
         }
-
         cart.TotalPrice += product.Price;
-        await _repositoryManager.CartRepository.UpdateCart(cart);
         await _repositoryManager.SaveAsync();
     }
 
+    public async Task ChangeProductQunatityAsync(Guid CartId, Guid ProductId, int Quantity)
+    {
+        if (Quantity <= 0)
+            throw new Exception("Quantity must be greater than 0");
+
+        var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(CartId);
+        if (cart == null)
+            throw new Exception("Cart was not found.");
+
+        var cartItem = cart.CartItems.Where(p => p.ProductId == ProductId).FirstOrDefault();
+        if (cartItem == null)
+            throw new ProductNotFoundException(ProductId);
+
+
+        if (cartItem.Quantity > Quantity)
+            cart.TotalPrice += (Quantity - cartItem.Quantity) * cartItem.Product.Price;
+        else
+            cart.TotalPrice -= (cartItem.Product.Price * Quantity);
+
+        cartItem.Quantity = Quantity;
+        await _repositoryManager.SaveAsync();
+    }
 }
