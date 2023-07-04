@@ -21,6 +21,7 @@
 git clone git@github.com:moamlrh/Ecommerce-WebApi.git
 ```
 - Open `appsettings.json` file to configure your `ConnectionStrings`
+- Go to `Ecommerce.Api/Extensions/SerivcesExtensions.cs` & Edit the `ConfigureSqlServer` extension.
 - Setup the Environmet variables `SECRET_KEY` for your **JWT** secret key.
 - Then you're ready to GOOO
 - But first you have to make the migrations
