@@ -1,5 +1,5 @@
 # Ecommerce-WebApi
-#### Ecommerce Application has been made using Asp.net core 8 WebApi with Clean Architecture and best practices
+#### Ecommerce Application has been made using Asp.net core 8 WebApi with Clean Architecture and The Best Practices.
 
 
 ## Features 
