@@ -58,7 +58,6 @@ public static class ServicesExtensions
             );
         });
     }
-
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
         services.AddScoped<IRepositoryManager, RepositoryManager>();
 
@@ -112,7 +111,7 @@ public static class ServicesExtensions
                 };
             });
     }
-    public static async void ConfigureRateLimitMiddleware(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureRateLimitMiddleware(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMemoryCache();
         services.AddHttpContextAccessor();
