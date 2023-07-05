@@ -33,7 +33,6 @@ git clone git@github.com:moamlrh/Ecommerce-WebApi.git
 ```
 dotnet ef migrations add initMigration
 ```
-
 ```
 dotnet ef database update
 ```
