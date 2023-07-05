@@ -1,8 +1,5 @@
-﻿using System.Net;
-using Ecommerce.Presentation.Actions;
+﻿using Microsoft.AspNetCore.Authorization;
 using Ecommerce.Service.Contracts;
-using Ecommerce.Shared;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Presentation.Controllers;
@@ -21,6 +18,7 @@ public class CartController : ControllerBase
         var cart = await _serviceManager.CartService.GetCartByIdAsync(CartId);
         return Ok(cart);
     }
+
     [HttpPost("{ProductId:guid}")]
     public async Task<IActionResult> AddProductToCart(string ProductId)
     {
@@ -28,6 +26,7 @@ public class CartController : ControllerBase
         await _serviceManager.CartService.AddProductToCartAsync(UserId, ProductId);
         return Ok(new { UserId, ProductId });
     }
+
     [HttpDelete("{CartId:guid}/{ProductId:guid}", Name = "Delete Product")]
     public async Task<IActionResult> DeleteProductFromCart(Guid CartId, Guid ProductId)
     {

@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using Ecommerce.Entities;
 using Ecommerce.Entities.ErrorModels;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace Ecommerce.Api;
