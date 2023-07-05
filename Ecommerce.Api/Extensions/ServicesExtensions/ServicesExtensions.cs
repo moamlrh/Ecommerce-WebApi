@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Text;
+using AspNetCoreRateLimit;
 using Ecommerce.Api.JwtConfig;
 using Ecommerce.Contracts;
 using Ecommerce.Entities;
@@ -109,20 +110,19 @@ public static class ServicesExtensions
                     ValidAudience = jwtSettings["ValidAudience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
-                // To check if user in the database or not (has been removed)
-                // if not revoke the token
-                // opts.Events = new JwtBearerEvents
-                // {
-                //     OnTokenValidated = context =>
-                //     {
-                //         var userManager = context.HttpContext.RequestServices.GetService<UserManager<User>>();
-                //         var userEmail = context.Principal.FindFirst("Email")?.Value;
-                //         var user = userManager.FindByEmailAsync(userEmail);
-                //         if (user == null)
-                //             context.Fail("UnAuthorized");
-                //         return Task.CompletedTask;
-                //     }
-                // };
             });
+    }
+    public static async void ConfigureRateLimitMiddleware(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddMemoryCache();
+        services.AddHttpContextAccessor();
+        services.AddInMemoryRateLimiting();
+
+        services.Configure<IpRateLimitOptions>(configuration.GetSection("IpRateLimiting"));
+        services.Configure<IpRateLimitPolicies>(configuration.GetSection("IpRateLimitPolicies"));
+        services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+        services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+        services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+        services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
     }
 }

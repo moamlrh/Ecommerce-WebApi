@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using Ecommerce.Api.Extensions;
 using Ecommerce.Presentation.Actions;
 
@@ -16,8 +17,8 @@ namespace Ecommerce.Api
 
 
             // Service Extensions
-            builder.Services.ConfigureSqlServer(builder.Configuration);
             builder.Services.ConfigureCors();
+            builder.Services.ConfigureSqlServer(builder.Configuration);
             builder.Services.ConfigureRepositoryManager();
             builder.Services.ConfigureServiceManager();
             builder.Services.ConfigureAutoMapper();
@@ -26,6 +27,7 @@ namespace Ecommerce.Api
             builder.Services.ConfigureJWT(builder.Configuration);
             builder.Services.AddScoped<ValidationActionAttribute>();
             builder.Services.AddScoped<ValidationProductAttribute>();
+            builder.Services.ConfigureRateLimitMiddleware(builder.Configuration);
 
             var app = builder.Build();
 
@@ -40,6 +42,9 @@ namespace Ecommerce.Api
 
             // Extenstions
             app.ConfigureExceptionHandler();
+
+            // Rate limit middleware
+            app.UseIpRateLimiting();
 
             // auth Identity
             app.UseAuthentication();
