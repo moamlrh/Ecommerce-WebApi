@@ -8,6 +8,7 @@
  - SqlServer
  - Identity/Jwt tokens and Refresh tokens for Auth
  - AutoMapper
+ - AspNetCoreRateLimit 
  - Clean Architecture
  - Repository Pattern
  - Options Pattern
