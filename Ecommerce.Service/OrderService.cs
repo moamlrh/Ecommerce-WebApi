@@ -7,7 +7,7 @@ using Ecommerce.Shared;
 
 namespace Ecommerce.Service;
 
-public class OrderService : IOrderService 
+public class OrderService : IOrderService
 {
     private readonly IRepositoryManager _repositoryManager;
     private readonly IMapper _mapper;
