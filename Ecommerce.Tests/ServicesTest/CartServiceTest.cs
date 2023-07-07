@@ -44,4 +44,24 @@ public class CartServiceTests
         Assert.NotNull(result);
         Assert.IsType<Cart>(result);
     }
+
+    [Fact]
+    public async void AddProductToCart_ValidCart_Test()
+    {
+        // arrange 
+        var user = new User { Id = "1" };
+        var cart = new Cart { Id = Guid.NewGuid(), UserId = user.Id, TotalPrice = 0 };
+        var product = new Product { Id = Guid.NewGuid(), Price = 39m, Name = "Test", UserId = user.Id };
+        _mockRepoManager.Setup(mang => mang.ProductsRepository.GetProductByIdAsync(product.Id)).Returns(Task.FromResult(product));
+
+        _mockRepoManager.Setup(mang => mang.CartRepository.GetCartByUserIdAsync(user.Id)).Returns(Task.FromResult(cart));
+
+        // act
+        await _cartService.AddProductToCartAsync(user.Id, product.Id.ToString());
+
+        // assert 
+        Assert.Equal(cart.TotalPrice, product.Price);
+        Assert.NotEmpty(cart.UserId);
+        Assert.Equal(1, cart.CartItems.FirstOrDefault().Quantity);
+    }
 }
