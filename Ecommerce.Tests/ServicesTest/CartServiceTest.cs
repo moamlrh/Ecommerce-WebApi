@@ -12,7 +12,6 @@ public class CartServiceTests
     private readonly ICartService _cartService;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<IRepositoryManager> _mockRepoManager;
-    private static readonly Guid UserId = Guid.NewGuid();
     public CartServiceTests()
     {
         _mockRepoManager = new Mock<IRepositoryManager>();
@@ -25,11 +24,14 @@ public class CartServiceTests
     public async void CreateCartReturnCartAsResult()
     {
         // arragne
+        var TotalPrice = 10m;
+        var cartId = Guid.NewGuid();
+        var UserId = Guid.NewGuid();
         var cart = new Cart
         {
+            Id = cartId,
             UserId = UserId.ToString(),
-            Id = Guid.NewGuid(),
-            TotalPrice = 10.5m
+            TotalPrice = TotalPrice,
         };
 
         _mockRepoManager.Setup(x => x.CartRepository.CreateCart(cart)).Returns(Task.FromResult(cart));
