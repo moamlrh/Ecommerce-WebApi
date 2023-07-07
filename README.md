@@ -10,6 +10,7 @@
 - Identity/Jwt Tokens and Refresh Tokens for Auth
 - AutoMapper
 - AspNetCoreRateLimit (Rate Limit)
+- Testing using `xunit`
 - Clean Architecture (Onion Architecture)
 - Repository Pattern & Separation of Concerns (SoC)
 - Dependency Injection (IoC)
