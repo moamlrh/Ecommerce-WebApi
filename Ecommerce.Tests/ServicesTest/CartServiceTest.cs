@@ -63,5 +63,6 @@ public class CartServiceTests
         Assert.Equal(cart.TotalPrice, product.Price);
         Assert.NotEmpty(cart.UserId);
         Assert.Equal(1, cart.CartItems.FirstOrDefault().Quantity);
+        _mockRepoManager.Verify(service => service.SaveAsync(), Times.Once);
     }
 }
