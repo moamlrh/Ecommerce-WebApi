@@ -40,4 +40,22 @@ public class CartControllerTests
         Assert.Equal(0, response.TotalPrice);
         Assert.NotNull(response);
     }
+
+    [Fact]
+    public async void DeleteProductFromCart_ReturnsString()
+    {
+        // arrange
+        var cartId = Guid.NewGuid();
+        var productId = Guid.NewGuid();
+        _serviceManager.Setup(mang => mang.CartService.RemoveProductFromCartAsync(cartId, productId)).Returns(Task.CompletedTask);
+
+        // act
+        var result = await _controller.DeleteProductFromCart(cartId, productId) as OkObjectResult;
+
+        // assert
+        var okResponse = Assert.IsType<OkObjectResult>(result as OkObjectResult);
+        var responseString = okResponse.Value as string;
+        Assert.Equal("Product has been deleted", responseString);
+        Assert.NotNull(responseString);
+    }
 }
