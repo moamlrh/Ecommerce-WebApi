@@ -76,4 +76,21 @@ public class CartServiceTests
         Assert.Empty(cart.CartItems);
         _mockRepoManager.Verify(x => x.SaveAsync(), Times.Once);
     }
+    [Fact]
+    public async void DeleteCartById_GetCartAndDeleted()
+    {
+        // arragne 
+        _mockRepoManager.Setup(x => x.CartRepository.GetCartByIdAsync(cart.Id))
+                            .Returns(Task.FromResult(cart));
+        _mockRepoManager.Setup(x => x.CartRepository
+                            .DeleteCart(cart))
+                            .Callback<Cart>(c => c = null);
+
+        // act 
+        await _cartService.DeleteCartByIdAsync(cart.Id);
+
+        // assert
+        _mockRepoManager.Verify(x => x.CartRepository.DeleteCart(cart), Times.Once);
+        _mockRepoManager.Verify(x => x.SaveAsync(), Times.Once);
+    }
 }
