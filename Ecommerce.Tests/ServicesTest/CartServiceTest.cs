@@ -6,6 +6,8 @@ using Ecommerce.Contracts;
 using AutoMapper;
 using Ecommerce.Shared;
 
+namespace Ecommerce.Tests.ServicesTest;
+
 public class CartServiceTests
 {
     private readonly ICartService _cartService;
