@@ -1,12 +1,7 @@
-using System.Security.Claims;
-using Ecommerce.Contracts;
 using Ecommerce.Entities.Models;
 using Ecommerce.Presentation.Controllers;
-using Ecommerce.Repository;
-using Ecommerce.Service;
 using Ecommerce.Service.Contracts;
 using Ecommerce.Shared;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 

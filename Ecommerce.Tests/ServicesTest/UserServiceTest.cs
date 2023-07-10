@@ -53,4 +53,14 @@ public class UserServiceTest
         Assert.NotNull(result);
         Assert.Equal(3, result.Count());
     }
+    [Fact]
+    public void RemoveUserById_shouldReturnTrue()
+    {
+        // arrange 
+        
+
+        // act 
+
+        // assert 
+    }
 }
