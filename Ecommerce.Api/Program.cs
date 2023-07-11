@@ -49,7 +49,7 @@ namespace Ecommerce.Api
             // auth Identity
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMiddleware<CheckJwtTokenUserIsActive>(); // for Testing purposes
+            // app.UseMiddleware<CheckJwtTokenUserIsActive>(); // for Testing purposes
 
             app.MapControllers();
 
