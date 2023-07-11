@@ -37,12 +37,18 @@ public class TokenGenerator : ITokenGenerator
         var secret = new SymmetricSecurityKey(key);
         var signingCred = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
 
+
         var claims = new List<Claim>
         {
             new Claim("Id", _user.Id),
             new Claim(ClaimTypes.Name, _user.UserName),
             new Claim(ClaimTypes.Email, _user.Email)
         };
+
+        // set roles in claims 
+        var roles = await _userManager.GetRolesAsync(_user);
+        var roleClaims = roles.Select(role => new Claim());
+        claims.AddRange(roleClaims);
 
         var refreshToken = GenerateRefreshToken();
         _user.RefreshToken = refreshToken;
