@@ -10,7 +10,6 @@ using Ecommerce.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Ecommerce.Entities;
 
 namespace Ecommerce.Service;
 
@@ -66,10 +65,12 @@ public class TokenGenerator : ITokenGenerator
     public async Task<TokenDto> RefreshToken(TokenDto token)
     {
         var principle = GetClaimsPrincipalFromExpiredToken(token.AccessToken);
-        var userId = principle.Claims.FirstOrDefault()?.Value;
-        var user = await _userManager.FindByIdAsync(userId);
+        var email = principle.Claims.Where(claim => claim.Type == ClaimTypes.Email).First().Value;
+        var user = await _userManager.FindByEmailAsync(email);
+
         if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
             throw new RefershTokenBadRequestException();
+
         var newToken = await CreateToken(user);
         return newToken;
     }

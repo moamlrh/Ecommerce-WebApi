@@ -40,7 +40,7 @@ public class AuthenticationService : IAuthenticationService
         return _userDto;
     }
 
-    public async Task<TokenDto> ValidateUser(UserForAuthDto user)
+    public async Task<TokenDto> Login(UserForAuthDto user)
     {
         _user = await _userManager.FindByEmailAsync(user.Email);
         var succeeded = _user != null && await _userManager.CheckPasswordAsync(_user, user.Password);

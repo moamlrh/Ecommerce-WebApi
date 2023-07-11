@@ -26,7 +26,7 @@ public class AuthenticationController : ControllerBase
     [ServiceFilter(typeof(ValidationActionAttribute))]
     public async Task<IActionResult> Login([FromBody] UserForAuthDto user)
     {
-        var tokens = await _serviceManager.AuthenticationService.ValidateUser(user);
+        var tokens = await _serviceManager.AuthenticationService.Login(user);
         return Ok(new { tokens });
     }
 }
