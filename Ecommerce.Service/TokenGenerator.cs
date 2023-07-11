@@ -47,7 +47,7 @@ public class TokenGenerator : ITokenGenerator
 
         // set roles in claims 
         var roles = await _userManager.GetRolesAsync(_user);
-        var roleClaims = roles.Select(role => new Claim());
+        var roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role));
         claims.AddRange(roleClaims);
 
         var refreshToken = GenerateRefreshToken();
