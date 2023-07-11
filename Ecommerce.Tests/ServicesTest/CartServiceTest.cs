@@ -9,7 +9,8 @@ using Ecommerce.Shared;
 namespace Ecommerce.Tests.ServicesTest;
 
 public class CartServiceTests
-{
+{s
+
     private readonly ICartService _cartService;
     private readonly User user;
     private readonly Cart cart;

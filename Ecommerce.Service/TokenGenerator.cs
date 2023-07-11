@@ -10,6 +10,7 @@ using Ecommerce.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Ecommerce.Entities;
 
 namespace Ecommerce.Service;
 
@@ -26,6 +27,7 @@ public class TokenGenerator : ITokenGenerator
     {
         _userManager = userManager;
         _jwtOptions = options.Value;
+
     }
 
     public async Task<TokenDto> CreateToken(User _user)
@@ -38,8 +40,8 @@ public class TokenGenerator : ITokenGenerator
         var claims = new List<Claim>
         {
             new Claim("Id", _user.Id),
-            new Claim("Username", _user.UserName),
-            new Claim("Email", _user.Email)
+            new Claim(ClaimTypes.Name, _user.UserName),
+            new Claim(ClaimTypes.Email, _user.Email)
         };
 
         var refreshToken = GenerateRefreshToken();
