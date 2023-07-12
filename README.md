@@ -2,7 +2,7 @@
 
 #### Ecommerce Application has been made using Asp.net core 8 WebApi with Clean Architecture and The Best Practices.
 
-## Technologies/Principles, Patterns and external libraries used  
+## Technologies / Principles, Patterns and external libraries used  
 
 - Asp.net core webapi 8
 - Entity framewrok 8
