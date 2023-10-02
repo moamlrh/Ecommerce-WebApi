@@ -25,6 +25,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --no-restore -o bulid
+        run: dotnet build --no-restore
       - name: Tests
-        run: dotnet test -v n
+        run: dotnet test -v n --no-restore
