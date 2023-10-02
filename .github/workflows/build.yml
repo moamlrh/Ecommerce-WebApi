@@ -28,7 +28,6 @@ jobs:
         run: dotnet build --no-restore
   test:
     name: run tests
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
