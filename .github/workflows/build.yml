@@ -24,9 +24,7 @@ jobs:
           dotnet-version: 7.0.x
       - name: Restore dependencies
         run: dotnet restore
-
       - name: Build
         run: dotnet build --no-restore -o bulid
-
       - name: Tests
-        run: dotnet test build/Ecommerce.Tests.dll --no-build --verbosity normal 
+        run: dotnet test -v n
