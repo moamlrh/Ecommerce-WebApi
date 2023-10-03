@@ -1,14 +1,10 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: Build and Test
+name: Build, Test and Deploy
 
 on:
   push:
     branches: ["master"]
-  pull_request:
-    branches: ["master"]
   workflow_dispatch:
+
 defaults:
   run:
     shell: bash
@@ -33,3 +29,22 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.USERNAME }}/ecommerce-webapi:latest
+
+  deploy:
+    needs: build
+    name: Deploy to server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker pull ${{ secrets.USERNAME }}/ecommerce-webapi:latest
+            docker container stop ecommerce-webapi
+            docker container prune -f
+            docker run -d --name ecommerce-webapi -p 80:80 -p 443:443 ${{ secrets.USERNAME }}/ecommerce-webapi:latest
+            docker image prune -f
