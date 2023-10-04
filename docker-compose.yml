@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: "sh -c 'dotnet run --project Ecommerce.Api/Ecommerce.Api.csproj'"
+    command: "sh -c 'dotnet /app/Ecommerce.Api.dll'"
     ports:
       - "8000:80"
     environment:

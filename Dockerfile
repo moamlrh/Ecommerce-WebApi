@@ -1,9 +1,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine as build
-WORKDIR /app
+WORKDIR /src
 COPY . .
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine
 RUN apk add --no-cache bash
 WORKDIR /app
-COPY --from=build /app/out .
+COPY --from=build /app .
