@@ -480,3 +480,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# ignore .env
+.env
+*.env
+**/*.env
+env
+.env/

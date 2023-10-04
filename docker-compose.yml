@@ -10,13 +10,18 @@ services:
       - "8000:80"
     environment:
       SqlServerString: "Server=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};"
+      SECRET_KEY: ${SECRET_KEY}
       validIssuer: ${JWT_ISSUER}
       validAudience: ${JWT_AUDIENCE}
-      issuerSigningKey: ${JWT_KEY}
+      issuerSigningKey: ${SECRET_KEY}
       RealIpHeader: "X-Real-IP"
       ForwardedForHeader: "X-Forwarded-For"
       ClientIpHeader: "X-Client-IP"
       AllowedHosts: "*"
+      EnableEndpointRateLimiting: false
+      StackBlockedRequests: false
+      StackBlockedRequestsTime: 60
+      StackBlockedRequestsMax: 20
     depends_on:
       - db
   db:
@@ -24,10 +29,11 @@ services:
     ports:
       - "1433:1433"
     environment:
-      SA_USERNAME: ${DB_USER}
-      SA_PASSWORD: ${DB_PASSWORD}
       ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
       MSSQL_PID: "Express"
+    expose:
+      - "1433"
     volumes:
       - dbdata:/var/opt/mssql
 
