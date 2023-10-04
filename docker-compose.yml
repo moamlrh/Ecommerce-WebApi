@@ -9,7 +9,7 @@ services:
     ports:
       - "8000:80"
     environment:
-      SqlServerString: "Server=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};"
+      sqlConnection: "Server=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};"
       SECRET_KEY: ${SECRET_KEY}
       validIssuer: ${JWT_ISSUER}
       validAudience: ${JWT_AUDIENCE}

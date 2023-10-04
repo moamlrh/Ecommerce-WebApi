@@ -41,21 +41,11 @@ public static class ServicesExtensions
         });
     }
 
-    public static void ConfigureSqlServer(
-        this IServiceCollection services,
-        IConfiguration configuration
-    )
+    public static void ConfigureSqlServer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<RepositoryContext>(options =>
         {
-            var connectionStringFromAppSettings = configuration.GetConnectionString("SqlServerString"); // Enable This for appsettings.json
-            var connectionStringFromEnvironment = Environment.GetEnvironmentVariable("SqlServerConnectionString"); // Enable this for Environment variable
-
-            options.UseSqlServer(
-                // If you're using connection string from appsettings
-                connectionStringFromEnvironment, // replace this with `connectionStringFromEnvironment`
-                options => options.MigrationsAssembly("Ecommerce.Api")
-            );
+            options.UseSqlServer(configuration.GetConnectionString("sqlConnection"), b => b.MigrationsAssembly("Ecommerce.Api"));
         });
     }
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
@@ -89,7 +79,7 @@ public static class ServicesExtensions
         services.AddTransient<ITokenGenerator, TokenGenerator>();
 
         var jwtSettings = configuration.GetSection("JWTOptions");
-        var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
+        var secretKey = jwtSettings["SecretKey"] ?? throw new ArgumentNullException("SecretKey");
 
         services
             .AddAuthentication(opts =>
