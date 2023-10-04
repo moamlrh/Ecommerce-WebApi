@@ -1,0 +1,35 @@
+version: "3.3"
+
+services:
+  ecommerce:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "sh -c 'dotnet run --project Ecommerce.Api/Ecommerce.Api.csproj'"
+    ports:
+      - "8000:80"
+    environment:
+      SqlServerString: "Server=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};"
+      validIssuer: ${JWT_ISSUER}
+      validAudience: ${JWT_AUDIENCE}
+      issuerSigningKey: ${JWT_KEY}
+      RealIpHeader: "X-Real-IP"
+      ForwardedForHeader: "X-Forwarded-For"
+      ClientIpHeader: "X-Client-IP"
+      AllowedHosts: "*"
+    depends_on:
+      - db
+  db:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    ports:
+      - "1433:1433"
+    environment:
+      SA_USERNAME: ${DB_USER}
+      SA_PASSWORD: ${DB_PASSWORD}
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    volumes:
+      - dbdata:/var/opt/mssql
+
+volumes:
+  dbdata:
