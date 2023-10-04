@@ -10,7 +10,7 @@ services:
       - "8000:80"
     environment:
       sqlConnection: "Server=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};"
-      SECRET_KEY: ${SECRET_KEY}
+      SecretKey: ${SECRET_KEY}
       validIssuer: ${JWT_ISSUER}
       validAudience: ${JWT_AUDIENCE}
       issuerSigningKey: ${SECRET_KEY}
