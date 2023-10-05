@@ -55,6 +55,7 @@ public static class ServicesExtensions
         {
             // how to make sure this works and connect to db and connect to sql server successful
             var connectionString = configuration.GetConnectionString("SqlServerString");
+            Console.WriteLine(connectionString);
             options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Ecommerce.Api"));
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
                 options.EnableSensitiveDataLogging();
