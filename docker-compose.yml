@@ -34,7 +34,7 @@ services:
       MSSQL_SA_PASSWORD: ${DB_PASSWORD}
       MSSQL_PID: "Express"
     expose:
-      - "1433"
+      - "${DB_PORT}"
     volumes:
       - dbdata:/var/opt/mssql
 
