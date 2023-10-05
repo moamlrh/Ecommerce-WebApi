@@ -9,28 +9,33 @@ services:
     ports:
       - "${PORT}:80"
     environment:
-      Kestrel__Endpoints__Urls__Url: "http://0.0.0.0:80"
-      ConnectionStrings__SqlServerString: "Server=${DB_HOST},${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
-      JWTOptions__SecretKey: ${SECRET_KEY}
-      JWTOptions__validIssuer: ${JWT_ISSUER}
-      JWTOptions__validAudience: ${JWT_AUDIENCE}
-      JWTOptions__issuerSigningKey: ${SECRET_KEY}
-      RealIpHeader: "X-Real-IP"
-      ForwardedForHeader: "X-Forwarded-For"
-      ClientIpHeader: "X-Client-IP"
-      AllowedHosts: "*"
-      EnableEndpointRateLimiting: false
-      StackBlockedRequests: false
-      StackBlockedRequestsTime: 60
-      StackBlockedRequestsMax: 20
+      - ConnectionStrings__SqlServerString=Server=db;Database=EcommerceApp;User Id=sa;Password=kDFJKSHIUE86432sfd;Encrypt=True;TrustServerCertificate=true
+      - JWTOptions__SecretKey=random-key-is-here
+      - JWTOptions__validIssuer=Ecommerce-Api
+      - JWTOptions__validAudience=Ecommerce-Api-Client
+      - JWTOptions__expires=60
+      - IpRateLimiting__EnableEndpointRateLimiting=false
+      - IpRateLimiting__StackBlockedRequests=false
+      - IpRateLimiting__RealIpHeader=X-Real-IP
+      - IpRateLimiting__ClientIdHeader=X-ClientId
+      - IpRateLimiting__HttpStatusCode=429
+      - IpRateLimiting__IpWhitelist=
+      - IpRateLimiting__EndpointWhitelist=get:/api/whaterehere
+      - IpRateLimiting__ClientWhitelist=
+      - IpRateLimiting__GeneralRules__0__Endpoint=*
+      - IpRateLimiting__GeneralRules__0__Period=1m
+      - IpRateLimiting__GeneralRules__0__Limit=25
+      - IpRateLimiting__IpRateLimitPolicies__IpRules__0__Ip=127.0.0.1
+      - IpRateLimiting__IpRateLimitPolicies__IpRules__0__Rules__0__Endpoint=*
+      - IpRateLimiting__IpRateLimitPolicies__IpRules__0__Rules__0__Period=1m
+      - IpRateLimiting__IpRateLimitPolicies__IpRules__0__Rules__0__Limit=25
     depends_on:
       - db
   db:
     image: "mcr.microsoft.com/mssql/server:2019-latest"
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: ${DB_PASSWORD}
-      MSSQL_PID: "Express"
+      SA_PASSWORD: "kDFJKSHIUE86432sfd"
     expose:
       - "${DB_PORT}"
     volumes:

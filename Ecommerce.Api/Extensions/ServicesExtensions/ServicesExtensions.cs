@@ -53,9 +53,7 @@ public static class ServicesExtensions
     {
         services.AddDbContext<RepositoryContext>(options =>
         {
-            // how to make sure this works and connect to db and connect to sql server successful
             var connectionString = configuration.GetConnectionString("SqlServerString");
-            // check if connection string is null or empty the get it from environment variable
             if (string.IsNullOrEmpty(connectionString))
                 connectionString = Environment.GetEnvironmentVariable("SqlServerString");
             Console.WriteLine(connectionString);
@@ -66,8 +64,8 @@ public static class ServicesExtensions
 
         using var sp = services.BuildServiceProvider();
         var context = sp.GetService<RepositoryContext>();
-        context.Database.Migrate();
-        context.Database.EnsureCreated();
+        context?.Database.Migrate();
+        context?.Database.EnsureCreated();
     }
 
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
