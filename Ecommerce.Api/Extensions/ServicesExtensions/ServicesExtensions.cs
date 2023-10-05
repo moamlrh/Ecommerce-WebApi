@@ -45,7 +45,11 @@ public static class ServicesExtensions
     {
         services.AddDbContext<RepositoryContext>(options =>
         {
-            options.UseSqlServer(configuration.GetConnectionString("sqlConnection"), b => b.MigrationsAssembly("Ecommerce.Api"));
+            // how to make sure this works and connect to db and connect to sql server successful 
+            var connectionString = configuration.GetConnectionString("SqlServerString");
+            options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Ecommerce.Api"));
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                options.EnableSensitiveDataLogging();
         });
     }
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>

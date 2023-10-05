@@ -15,18 +15,21 @@ public class AuthenticationService : IAuthenticationService
     private readonly UserManager<User> _userManager;
     private readonly ITokenGenerator _tokenGenerator;
     private User? _user;
+    // private readonly RepositoryContext _context;
 
     public AuthenticationService(
         IRepositoryManager repositoryManager,
         IMapper mapper,
         UserManager<User> userManager,
         ITokenGenerator tokenGenerator
+        // RepositoryContext context
     )
     {
         _repositoryManager = repositoryManager;
         _mapper = mapper;
         _userManager = userManager;
         _tokenGenerator = tokenGenerator;
+        // _context = context;
     }
 
     public async Task<UserDto> RegisterUser(UserForRegisterDto user)
