@@ -29,7 +29,12 @@ public static class ServicesExtensions
 
     public static void ConfigureCors(this IServiceCollection services)
     {
-        services.AddCors(opts => opts.AddDefaultPolicy(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+        services.AddCors(
+            opts =>
+                opts.AddDefaultPolicy(
+                    policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
+                )
+        );
     }
 
     public static void ConfigureApiBehaviorOptions(this IServiceCollection services)
@@ -41,17 +46,26 @@ public static class ServicesExtensions
         });
     }
 
-    public static void ConfigureSqlServer(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureSqlServer(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.AddDbContext<RepositoryContext>(options =>
         {
-            // how to make sure this works and connect to db and connect to sql server successful 
+            // how to make sure this works and connect to db and connect to sql server successful
             var connectionString = configuration.GetConnectionString("SqlServerString");
             options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Ecommerce.Api"));
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
                 options.EnableSensitiveDataLogging();
         });
+
+        using var sp = services.BuildServiceProvider();
+        var context = sp.GetService<RepositoryContext>();
+        context.Database.Migrate();
+        context.Database.EnsureCreated();
     }
+
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
         services.AddScoped<IRepositoryManager, RepositoryManager>();
 
@@ -105,7 +119,11 @@ public static class ServicesExtensions
                 };
             });
     }
-    public static void ConfigureRateLimitMiddleware(this IServiceCollection services, IConfiguration configuration)
+
+    public static void ConfigureRateLimitMiddleware(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.AddMemoryCache();
         services.AddHttpContextAccessor();
