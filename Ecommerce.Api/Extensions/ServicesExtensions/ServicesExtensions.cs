@@ -55,6 +55,9 @@ public static class ServicesExtensions
         {
             // how to make sure this works and connect to db and connect to sql server successful
             var connectionString = configuration.GetConnectionString("SqlServerString");
+            // check if connection string is null or empty the get it from environment variable
+            if (string.IsNullOrEmpty(connectionString))
+                connectionString = Environment.GetEnvironmentVariable("SqlServerString");
             Console.WriteLine(connectionString);
             options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Ecommerce.Api"));
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")

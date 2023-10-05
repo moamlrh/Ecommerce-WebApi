@@ -9,12 +9,12 @@ services:
     ports:
       - "${PORT}:80"
     environment:
-      # SqlServerString: "Server=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};"
-      SqlServerString: "Server=${DB_HOST},${DB_PORT};Database=${DB_NAME};TrustServerCertificate=True;User Id=${DB_USER};Password=${DB_PASSWORD};TrustServerCertificate=true;Encrypt=True;"
-      SecretKey: ${SECRET_KEY}
-      validIssuer: ${JWT_ISSUER}
-      validAudience: ${JWT_AUDIENCE}
-      issuerSigningKey: ${SECRET_KEY}
+      Kestrel__Endpoints__Urls__Url: "http://0.0.0.0:80"
+      ConnectionStrings__SqlServerString: "Server=${DB_HOST},${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};Encrypt=True;TrustServerCertificate=True;"
+      JWTOptions__SecretKey: ${SECRET_KEY}
+      JWTOptions__validIssuer: ${JWT_ISSUER}
+      JWTOptions__validAudience: ${JWT_AUDIENCE}
+      JWTOptions__issuerSigningKey: ${SECRET_KEY}
       RealIpHeader: "X-Real-IP"
       ForwardedForHeader: "X-Forwarded-For"
       ClientIpHeader: "X-Client-IP"
