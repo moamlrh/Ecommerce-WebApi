@@ -1,4 +1,4 @@
-﻿using Ecommerce.Contracts;
+using Ecommerce.Contracts;
 
 namespace Ecommerce.Repository;
 
@@ -24,4 +24,5 @@ public class RepositoryManager : IRepositoryManager
     public IOrderRepository OrderRepository => orderRepository.Value;
     public IProductRepository ProductsRepository => productRepository.Value;
     public Task SaveAsync() => _repositoryContext.SaveChangesAsync();
+    // todo: change to SaveChangesAsync()
 }
