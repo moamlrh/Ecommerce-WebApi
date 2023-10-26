@@ -1,4 +1,4 @@
-﻿using Ecommerce.Entities.Models;
+using Ecommerce.Entities.Models;
 using Ecommerce.Shared;
 
 namespace Ecommerce.Contracts;
@@ -11,4 +11,5 @@ public interface ICartRepository
     Task CreateCart(Cart cart);
     void DeleteCart(Cart cart);
     Task UpdateCart(Cart cart);
+    Task RemoveRange();
 }
