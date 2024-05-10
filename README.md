@@ -20,7 +20,8 @@
 
 ## Run / Test The API
 
-### I suggest, using `Postman` or `Swagger` (has been implemented by default with the API) They're very helpfull!
+### I suggest, using `Postman` or `Swagger` (has been implemented by default with the API) They're very helpful!
+#### **EDIT** : *I DON'T RECOMMEND USING POSTMAN, YOU MUST USE CURL INSTEAD xD*
 
 ```
 git clone git@github.com:moamlrh/Ecommerce-WebApi.git
