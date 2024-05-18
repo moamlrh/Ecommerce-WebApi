@@ -1,8 +1,7 @@
 ﻿using Ecommerce.Entities.Models;
-using Ecommerce.Shared;
 
 namespace Ecommerce.Contracts;
 
-public interface IOrderRepository
+public interface IOrderRepository : IRepositoryBase<Order>
 {
 }

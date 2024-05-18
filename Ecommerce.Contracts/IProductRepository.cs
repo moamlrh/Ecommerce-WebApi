@@ -3,7 +3,7 @@ using Ecommerce.Shared;
 
 namespace Ecommerce.Contracts;
 
-public interface IProductRepository
+public interface IProductRepository : IRepositoryBase<Product>
 {
     public void AddProduct(Product product);
     public void DeleteProduct(Product product);

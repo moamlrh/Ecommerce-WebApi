@@ -3,8 +3,7 @@ using Ecommerce.Contracts;
 
 namespace Ecommerce.Repository;
 
-public class RepositoryBase<T> : IRepositoryBase<T>
-    where T : class
+public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
     private readonly RepositoryContext _context;
 
@@ -18,6 +17,5 @@ public class RepositoryBase<T> : IRepositoryBase<T>
 
     public IQueryable<T> FindAll() => _context.Set<T>();
 
-    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> condition) =>
-        _context.Set<T>().Where(condition);
+    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> condition) => _context.Set<T>().Where(condition);
 }

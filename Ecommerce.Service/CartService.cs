@@ -24,22 +24,19 @@ public class CartService : ICartService
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         };
-        await _repositoryManager.CartRepository.CreateCart(cart);
+        _repositoryManager.CartRepository.Create(cart);
         await _repositoryManager.SaveAsync();
         return cart;
     }
     public async Task DeleteCartByIdAsync(Guid Id)
     {
-        var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(Id);
-        _repositoryManager.CartRepository.DeleteCart(cart);
+        var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(Id) ?? throw new Exception("Cart was not found!");
+        _repositoryManager.CartRepository.Delete(cart);
         await _repositoryManager.SaveAsync();
     }
     public async Task<CartDto> GetCartByIdAsync(Guid Id)
     {
-        var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(Id);
-        if (cart == null)
-            throw new Exception("Cart was not found!");
-
+        var cart = await _repositoryManager.CartRepository.GetCartByIdAsync(Id) ?? throw new Exception("Cart was not found!");
         var cartItems = _mapper.Map<IEnumerable<CartItemDto>>(cart.CartItems);
         var cartDto = _mapper.Map<CartDto>(cart);
         cartDto.CartItems = cartItems;

@@ -3,13 +3,9 @@ using Ecommerce.Shared;
 
 namespace Ecommerce.Contracts;
 
-public interface ICartRepository
+public interface ICartRepository : IRepositoryBase<Cart>
 {
-    Task<Cart> GetCartByIdAsync(Guid Id);
-    Task<Cart> GetCartByUserIdAsync(string UserId);
+    Task<Cart?> GetCartByIdAsync(Guid Id);
+    Task<Cart?> GetCartByUserIdAsync(string UserId);
     Task<IEnumerable<Cart>> GetAllCarts(string UserId);
-    Task CreateCart(Cart cart);
-    void DeleteCart(Cart cart);
-    Task UpdateCart(Cart cart);
-    Task RemoveRange();
 }
